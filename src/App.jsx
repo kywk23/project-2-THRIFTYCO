@@ -17,8 +17,11 @@ function App() {
         </a>
       </div>
       <h1>Project 2 - Esther & Kelvin </h1>
+      <h2>testing</h2>
       <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>count is {count}</button>
+        <button onClick={() => setCount((count) => count + 1)}>
+          count is {count}
+        </button>
         <p>
           Edit <code>src/App.jsx</code> and save to test HMR
         </p>
