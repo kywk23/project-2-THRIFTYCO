@@ -3,6 +3,7 @@ export default function LandingPage() {
     <>
       <h1>Simple way to manage personal finances</h1>
       <p>Know where your money goes.</p>
+      <p>testing</p>
     </>
   );
 }
