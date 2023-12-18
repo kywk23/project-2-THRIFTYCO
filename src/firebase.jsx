@@ -4,13 +4,13 @@ import { getStorage } from "firebase/storage";
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_API_KEY,
-  authDomain: import.meta.env.VITE_AUTH_DOMAIN,
-  databaseURL: import.meta.env.VITE_DATABASE_URL,
-  projectId: import.meta.env.VITE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_APP_ID,
+  apiKey: import.meta.env.VITE_SOME_API_KEY,
+  authDomain: import.meta.env.VITE_SOME_AUTH_DOMAIN,
+  databaseURL: import.meta.env.VITE_SOME_DATABASE_URL,
+  projectId: import.meta.env.VITE_SOME_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_SOME_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_SOME_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_SOME_APP_ID,
 };
 
 // To decide on naming of variables again below:
