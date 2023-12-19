@@ -1,7 +1,7 @@
 import "./App.css";
 import LandingPage from "./Components/LandingPage.jsx";
 import ErrorPage from "./Components/ErrorPage.jsx";
-import SignUp from "./Components/SignUp.jsx";
+import LogInSignUp from "./Components/LogInSignUp.jsx";
 
 function App() {
   return (
@@ -9,7 +9,7 @@ function App() {
       <h1>Money Tracker </h1>
       {/* <LandingPage />
       <ErrorPage /> */}
-      <SignUp />
+      <LogInSignUp />
     </>
   );
 }
