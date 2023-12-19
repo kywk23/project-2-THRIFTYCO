@@ -1,6 +1,6 @@
 import "./App.css";
-import LandingPage from "./LandingPage.jsx";
-import ErrorPage from "./ErrorPage.jsx";
+import LandingPage from "./Components/LandingPage.jsx";
+import ErrorPage from "./Components/ErrorPage.jsx";
 
 function App() {
   return (
