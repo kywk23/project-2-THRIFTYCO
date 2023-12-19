@@ -14,7 +14,7 @@ const firebaseConfig = {
 };
 
 // To decide on naming of variables again below:
-// const firebaseApp = initializeApp(firebaseConfig);
-// export const database = getDatabase(firebaseApp);
-// export const storage = getStorage(firebaseApp);
-// export const auth = getAuth(firebaseApp);
+const firebaseApp = initializeApp(firebaseConfig);
+export const database = getDatabase(firebaseApp);
+export const storage = getStorage(firebaseApp);
+export const auth = getAuth(firebaseApp);
