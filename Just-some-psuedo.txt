@@ -1,2 +1,76 @@
-App structure
--testing
+App structure & components
+
+
+1) Landing Page
+  -Title of App
+  -"Catchphrase" + intro
+  -IMG of App
+  -1 x <button "Get Started"  to link to Sign up / Log in Page />
+  - No Nav Bar
+
+2) Sign up / Log In Page  
+States required / Tracking:
+
+  2.1) Log in Page
+    - 1 x IMG of Project Logo
+   - 1 x input type=email
+   - 1 x input type=text value=password
+   - 1 x hyperlink for "No Account? Sign up here. 
+    - 1 x <button "Log In">
+     - Func to link to Firebase Auth (signInWithEmailAndPassword)
+
+  2.2) Sign up Page (useState first, refactor useReducer + context)
+   - 1 x input type=email
+   - 1 x input type=text value=password
+   - 1 x input type=text value=displayName
+   - Display Photo upload: 1 x type="file" 
+   - 1 x <button "Sign Up">
+     - Func to link to Firebase Auth (createUserWithEmailAndPassword)
+
+     2.2.1) Sign Up Welcome Page
+     - Hi <user>, welcome to App
+      - userCredential.name (?)
+
+3) Home Page (AKA Overview Dashboard)
+  3.1) Nav Bar
+  - Component by itself
+
+  3.2) Overview (Left of Page) (rendered by point 6 n 7. build last)
+   - "You owe <user1>, $101.20.
+   - "You owe <user2>, $51.60.
+   (RTDB types/values required)
+
+   3.3) Graph of Total Spending in Month
+   - rendering of graph: https://d3js.org/
+
+
+4) Nav Bar
+  -component for all elements 
+  - might need to do separate component for routing
+
+
+5) Groups
+  5.1) Adding of friends
+   - Input for adding friends' emails or usernames.
+   - "Add Friend" Button
+
+6) Expenses Tracker
+  - information to be stored on RTDB 
+    -ReducerActionTypes
+      - ADD, EDIT, REMOVE
+    -Build input fields before friends
+
+7) Bill Split 
+  - Input fields for bill details (total amount, items, participants, etc.).
+  - "Split Bill" Button
+  - Display calculated splits.
+
+Firebase
+1) Realtime Database
+2) Storage
+3) Authentication
+ - How to see only your "own" account data?
+
+
+Link Routing for App
+-
