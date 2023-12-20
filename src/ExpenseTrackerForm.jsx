@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
 
+//npm package: date picker
+import DatePicker from "react-date-picker";
+import "react-date-picker/dist/DatePicker.css";
+import "react-calendar/dist/Calendar.css";
+
 export default function ExpenseTrackerForm() {
   const [name, setName] = useState(""); // input transaction name
   const [amount, setAmount] = useState(""); // input number
@@ -7,15 +12,42 @@ export default function ExpenseTrackerForm() {
   const [note, setNote] = useState("");
   const [currentDate, setCurrentDate] = useState(""); // state to hold current date
 
-  useEffect(() => {
-    // use current date for now
-    setCurrentDate(new Date().toDateString());
-  }, []);
+  //date picker
+  const [selectedDate, setSelectedDate] = useState(new Date().toDateString()); // current date if user did not choose
+
+  // useEffect(() => {
+  //   // use current date for now
+  //   // use npm date picker
+  //   setCurrentDate(new Date().toDateString());
+  // }, []);
+
+  //set date format to Day and Date only
+  const handleDateChange = (date) => {
+    setSelectedDate(date.toDateString());
+  };
+
+  // Prevent negative values for amount
+  const handleAmountChange = (e) => {
+    let inputValue = e.target.value;
+
+    //when user keys in cents without "0" at the start, add a 0
+    if (inputValue.startsWith(".")) {
+      inputValue = `0${inputValue}`;
+    }
+
+    //regular expression of value starting from 0.01 or .01 (without a zero before decimal point)
+    //disallow negative numbers
+    const regex = /^(?!-)\d*(\.\d{0,2})?$/;
+
+    if (regex.test(inputValue) || inputValue === "") {
+      setAmount(inputValue);
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Transaction", {
-      Date: currentDate,
+      selectedDate,
       name,
       amount,
       category,
@@ -29,7 +61,9 @@ export default function ExpenseTrackerForm() {
       <br />
       <form onSubmit={handleSubmit}>
         <div>
-          <div>Date: {currentDate}</div>
+          Select a date:
+          <br />
+          <DatePicker onChange={handleDateChange} value={selectedDate} />
         </div>
         <br />
         <label>
@@ -45,8 +79,10 @@ export default function ExpenseTrackerForm() {
           <div>Amount</div>
           <input
             type="number"
+            step="0.01" //increament
+            min="0.01" //minimal amount
             required
-            onChange={(e) => setAmount(e.target.value)}
+            onChange={(e) => handleAmountChange(e)}
             value={amount}
           />
         </label>
@@ -60,6 +96,7 @@ export default function ExpenseTrackerForm() {
           />
         </label>
         <label>
+          {/* optional for user */}
           <div>Note:</div>
           <input
             type="text"
