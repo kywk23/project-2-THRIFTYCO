@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getDatabase } from "firebase/database";
 import { getStorage } from "firebase/storage";
-import { getAuth } from "firebase/auth";
+import { getAuth, updateProfile } from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_SOME_API_KEY,
@@ -14,7 +14,8 @@ const firebaseConfig = {
 };
 
 // To decide on naming of variables again below:
-// const firebaseApp = initializeApp(firebaseConfig);
-// export const database = getDatabase(firebaseApp);
-// export const storage = getStorage(firebaseApp);
-// export const auth = getAuth(firebaseApp);
+const firebaseApp = initializeApp(firebaseConfig);
+export const database = getDatabase(firebaseApp);
+export const storage = getStorage(firebaseApp);
+export const auth = getAuth(firebaseApp);
+export const updateProfileInfo = (user, profile) => updateProfile(user, profile);
