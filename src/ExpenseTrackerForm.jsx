@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { database } from "./Components/firebase.jsx";
+import { ref, push } from "firebase/database";
 
 //npm package: date picker
 import DatePicker from "react-date-picker";
@@ -10,16 +12,8 @@ export default function ExpenseTrackerForm() {
   const [amount, setAmount] = useState(""); // input number
   const [category, setCategory] = useState(""); // category of item
   const [note, setNote] = useState("");
-  const [currentDate, setCurrentDate] = useState(""); // state to hold current date
-
   //date picker
   const [selectedDate, setSelectedDate] = useState(new Date().toDateString()); // current date if user did not choose
-
-  // useEffect(() => {
-  //   // use current date for now
-  //   // use npm date picker
-  //   setCurrentDate(new Date().toDateString());
-  // }, []);
 
   //set date format to Day and Date only
   const handleDateChange = (date) => {
@@ -46,13 +40,31 @@ export default function ExpenseTrackerForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Transaction", {
+    const expenseRef = ref(database, "personal-expenses");
+
+    push(expenseRef, {
       selectedDate,
       name,
       amount,
       category,
       note,
-    });
+    })
+      .then(() => {
+        console.log("Transaction", {
+          selectedDate,
+          name,
+          amount,
+          category,
+          note,
+        });
+        setName("");
+        setAmount("");
+        setCategory("");
+        setNote("");
+      })
+      .catch((error) => {
+        console.log("Personal Expenses error", error);
+      });
   };
 
   return (
