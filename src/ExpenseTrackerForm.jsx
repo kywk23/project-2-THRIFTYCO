@@ -41,7 +41,6 @@ export default function ExpenseTrackerForm() {
   const handleSubmit = (e) => {
     e.preventDefault();
     const expenseRef = ref(database, "personal-expenses");
-
     push(expenseRef, {
       selectedDate,
       name,
@@ -63,7 +62,7 @@ export default function ExpenseTrackerForm() {
         setNote("");
       })
       .catch((error) => {
-        console.log("Personal Expenses error", error);
+        console.log("submit personal expenses error", error);
       });
   };
 
@@ -88,7 +87,7 @@ export default function ExpenseTrackerForm() {
           />
         </label>
         <label>
-          <div>Amount</div>
+          <div>Amount ($):</div>
           <input
             type="number"
             step="0.01" //increament
