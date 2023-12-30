@@ -8,6 +8,7 @@ export default function CreateGroup() {
   const [members, setMembers] = useState([]);
   const [memberName, setMemberName] = useState("");
   //Expense states
+  const [expenses, setExpenses] = useState([]);
   const [expenseName, setExpenseName] = useState("");
   const [inputAmount, setInputAmount] = useState("");
   const [inputPaidBy, setInputPaidBy] = useState("");
@@ -29,6 +30,12 @@ export default function CreateGroup() {
     console.log("Expense Name:", expenseName);
     console.log("Amount:", inputAmount);
     console.log("Paid By:", inputPaidBy);
+    const newExpense = {
+      Name: expenseName,
+      Amount: inputAmount,
+      PaidBy: inputPaidBy,
+    };
+    setExpenses([...expenses, newExpense]);
     setExpenseName("");
     setInputAmount("");
     setInputPaidBy("");
@@ -38,7 +45,6 @@ export default function CreateGroup() {
     <div>
       {/* Group Creation */}
       <h1>Create Group</h1>
-
       <label>
         Group Name:
         <input
@@ -49,7 +55,6 @@ export default function CreateGroup() {
         />
       </label>
       <button onClick={handleAddGroup}>Create Group</button>
-
       <br />
       {/* Group Rendering if True and Members Addition */}
       {groupCreated && (
@@ -115,6 +120,15 @@ export default function CreateGroup() {
           </form>
         </div>
       )}
+      <br />
+      Group Expenses:
+      <ul>
+        {expenses.map((expense, index) => (
+          <li key={index}>
+            {expense.Name} - ${expense.Amount} by {expense.PaidBy}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
