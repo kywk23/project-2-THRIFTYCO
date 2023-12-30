@@ -3,6 +3,7 @@ import LandingPage from "./Components/LandingPage.jsx";
 import ErrorPage from "./Components/ErrorPage.jsx";
 import LogInSignUp from "./Components/LogInSignUp.jsx";
 import ExpenseTracker from "./ExpenseTracker.jsx";
+import CreateGroup from "./Components/BillSplit/CreateGroup.jsx";
 
 function App() {
   return (
@@ -10,8 +11,9 @@ function App() {
       <h1>Money Tracker </h1>
       {/* <LandingPage />
       <ErrorPage /> */}
-      <LogInSignUp />
-      <ExpenseTracker />
+      {/* <LogInSignUp />
+      <ExpenseTracker /> */}
+      <CreateGroup />
     </>
   );
 }
