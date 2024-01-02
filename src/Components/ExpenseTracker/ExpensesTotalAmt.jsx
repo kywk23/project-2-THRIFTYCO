@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ref, onValue } from "firebase/database";
-import { database } from "./Components/firebase.jsx";
+import { database } from "../firebase.jsx";
 
 export default function ExpensesTotalAmt() {
   const [totalAmount, setTotalAmount] = useState(0); // State for total amount

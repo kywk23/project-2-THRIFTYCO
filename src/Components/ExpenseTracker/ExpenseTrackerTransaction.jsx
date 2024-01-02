@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from "react";
-import { database } from "./Components/firebase";
+import { database } from "../firebase";
 import { ref, onValue, remove, update } from "firebase/database";
 
 const TransactionList = () => {
@@ -48,6 +48,7 @@ const TransactionList = () => {
 
   //useMemo is React's use memory.
   //occurs when the transactions state changes,
+
   const sortedTransactions = useMemo(() => {
     return [...transactions].sort((a, b) => {
       //latest date to earlist date
@@ -65,7 +66,7 @@ const TransactionList = () => {
             <p>Date: {transaction.selectedDate}</p>
             <p>Name: {transaction.name}</p>
             <p>Amount ($): {transaction.amount}</p>
-            <p>Category: {transaction.category}</p>
+            <p>Category: {transaction.categoryField}</p>
             <p>Note: {transaction.note}</p>
             <button onClick={() => handleDelete(transaction.id)}>Delete</button>
           </li>
