@@ -74,6 +74,7 @@ export default function ExpenseTrackerForm() {
     // Fetch categories from Firebase when the component mounts
     onValue(categoriesRef, (snapshot) => {
       const categoriesData = snapshot.val();
+      console.log("category", snapshot);
       if (!categoriesData) {
         // Set default categories in Firebase if they don't exist
         update(categoriesRef, {
@@ -166,7 +167,7 @@ export default function ExpenseTrackerForm() {
             </option>
             {categories.map((cat, index) => (
               <option key={index} value={cat}>
-                {/* standardise appearance of text */}
+                {/* standardise appearance of text on frontend*/}
                 {cat.charAt(0).toUpperCase() + cat.slice(1).toLowerCase()}
               </option>
             ))}
