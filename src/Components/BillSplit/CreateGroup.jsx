@@ -1,9 +1,13 @@
 import { useState } from "react";
+import { database } from "../firebase";
+import { ref, push, set, update } from "firebase/database";
 
 export default function CreateGroup() {
   // Group Creation states (TO ADD: multiple groups)
   const [groupName, setGroupName] = useState("");
   const [groupCreated, setGroupCreated] = useState(false);
+  const [activeGroup, setActiveGroup] = useState(null);
+  const [groupList, setGroupList] = useState([]);
   //Members states
   const [members, setMembers] = useState([]);
   const [memberName, setMemberName] = useState("");
@@ -14,15 +18,31 @@ export default function CreateGroup() {
   const [inputPaidBy, setInputPaidBy] = useState("");
 
   const handleAddGroup = (e) => {
-    e.preventDefault();
-    console.log(groupName);
+    const newGroup = {
+      name: groupName,
+    };
+    setGroupList((prevGroupList) => [...prevGroupList, newGroup]);
+    setGroupName("");
     setGroupCreated(true);
+    const groupListRef = ref(database, `All-Groups`);
+    const newGroupRef = push(groupListRef, {
+      groupName: groupName,
+    });
   };
 
-  const handleAddMember = () => {
-    setMembers([...members, memberName]);
-    console.log("Members:", members);
-    setMemberName("");
+  const handleAddMember = (e) => {
+    const memberRef = ref(database, `All-Groups/${activeGroup}/members`);
+    const newMemberRef = push(memberRef, {
+      member: memberName,
+    })
+      .then(() => {
+        console.log(memberName);
+        setMembers((prevMembers) => [...prevMembers, memberName]);
+        setMemberName("");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const handleAddExpense = () => {
@@ -76,8 +96,22 @@ export default function CreateGroup() {
   //     add a transaction from maxDebtor to maxCreditor with minAmount to transactions
   //   return transactions
 
-  // Smallest num in paidBy, will pay other users;
-  // paying amount =
+  // function splitTheBill(obj) {
+  //   var total = 0;
+  //   Object.keys(obj).forEach(function (key) {
+  //     total += obj[key];
+  //   });
+
+  //   var average = total / Object.keys(obj).length;
+
+  //   var result = {};
+  //   Object.keys(obj).forEach(function (key) {
+  //     result[key] = average - obj[key];
+  //   });
+
+  //   return result;
+  // }
+
   return (
     <div>
       {/* Group Creation */}
@@ -96,7 +130,17 @@ export default function CreateGroup() {
       {/* Group Rendering if True and Members Addition */}
       {groupCreated && (
         <div>
-          <h2>Group Name: {groupName}</h2>
+          <h2>
+            Active Group:{" "}
+            <select value={activeGroup} onChange={(e) => setActiveGroup(e.target.value)}>
+              <option value="">Select</option>
+              {groupList.map((group) => (
+                <option key={group.id} value={group.id}>
+                  {group.name}
+                </option>
+              ))}
+            </select>
+          </h2>
           <label>
             Members:
             <input
@@ -115,7 +159,7 @@ export default function CreateGroup() {
             ))}
           </ul>
           {/* Expense Addition */}
-          <form>
+          <form onSubmit={handleAddExpense}>
             <label>
               Expenses:
               <input
@@ -151,9 +195,7 @@ export default function CreateGroup() {
                 ))}
               </select>
             </label>
-            <button type="button" onClick={handleAddExpense}>
-              Add Expense
-            </button>
+            <button type="submit">Add Expense</button>
           </form>
         </div>
       )}
@@ -161,7 +203,7 @@ export default function CreateGroup() {
       Group Expenses:
       <ul>
         {expenses.map((expense, index) => (
-          <li key={index}>
+          <li key={expense.id}>
             {expense.Name} - ${expense.Amount}, paid by {expense.PaidBy}
           </li>
         ))}
