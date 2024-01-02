@@ -20,7 +20,6 @@ export default function CreateGroup() {
   };
 
   const handleAddMember = () => {
-    // if (memberName.trim() !== "") {
     setMembers([...members, memberName]);
     console.log("Members:", members);
     setMemberName("");
@@ -39,8 +38,46 @@ export default function CreateGroup() {
     setExpenseName("");
     setInputAmount("");
     setInputPaidBy("");
+    pricePerPax();
+    console.log(pricePerPax());
   };
 
+  const pricePerPax = () => {
+    const totalAmount = expenses.reduce((a, b) => a + b.Amount, 0);
+    const numberOfMembers = members.length;
+    const pricePerPax = totalAmount / numberOfMembers;
+    return pricePerPax;
+  };
+
+  // put to RTDB
+  // 1) render total (inputAmount) by respective paidBy
+
+  //  function splitBill(users, expenses)
+  //   // users is an array of user objects with name and balance properties
+  //   // expenses is an array of expense objects with name, amount, paidBy and splitBy properties
+  //   // update the balance of each user based on the expenses
+  //   for each expense in expenses
+  //     let payer = expense.paidBy
+  //     let amount = expense.amount
+  //     let receivers = expense.splitBy
+  //     let share = amount / receivers.length
+  //     for each receiver in receivers
+  //       if receiver is not payer
+  //         receiver.balance -= share
+  //         payer.balance += share
+  //   // find the minimum number of transactions to settle the debts
+  //   let transactions = []
+  //   while users have non-zero balances
+  //     let maxCreditor = user with maximum positive balance
+  //     let maxDebtor = user with maximum negative balance
+  //     let minAmount = minimum of maxCreditor.balance and -maxDebtor.balance
+  //     maxDebtor.balance += minAmount
+  //     maxCreditor.balance -= minAmount
+  //     add a transaction from maxDebtor to maxCreditor with minAmount to transactions
+  //   return transactions
+
+  // Smallest num in paidBy, will pay other users;
+  // paying amount =
   return (
     <div>
       {/* Group Creation */}
@@ -125,10 +162,12 @@ export default function CreateGroup() {
       <ul>
         {expenses.map((expense, index) => (
           <li key={index}>
-            {expense.Name} - ${expense.Amount} by {expense.PaidBy}
+            {expense.Name} - ${expense.Amount}, paid by {expense.PaidBy}
           </li>
         ))}
       </ul>
+      <br />
+      Balances:
     </div>
   );
 }
