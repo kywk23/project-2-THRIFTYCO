@@ -69,14 +69,14 @@ export default function ExpenseTrackerForm() {
 
   useEffect(() => {
     const categoriesRef = ref(database, "expenses-categories");
-    const defaultCategories = ["Food", "Bills", "Transportation"]; //default category for all users
+    const defaultCategories = ["Food", "Bills", "Transportation"]; //default categories for all users
 
-    // Fetch categories from Firebase when the component mounts
+    //fetch categories from Firebase when the component mounts
     onValue(categoriesRef, (snapshot) => {
       const categoriesData = snapshot.val();
-      console.log("category", snapshot);
+      console.log("category", snapshot.val());
       if (!categoriesData) {
-        // Set default categories in Firebase if they don't exist
+        //add default categories in Firebase if they don't exist
         update(categoriesRef, {
           ...defaultCategories.reduce(
             (acc, category) => ({ ...acc, [category]: true }),

@@ -48,7 +48,6 @@ const TransactionList = () => {
 
   //useMemo is React's use memory.
   //occurs when the transactions state changes,
-
   const sortedTransactions = useMemo(() => {
     return [...transactions].sort((a, b) => {
       //latest date to earlist date
