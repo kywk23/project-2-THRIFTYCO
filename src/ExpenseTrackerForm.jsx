@@ -79,12 +79,7 @@ export default function ExpenseTrackerForm() {
         <br />
         <label>
           <div>Transaction Name:</div>
-          <input
-            type="text"
-            required
-            onChange={(e) => setName(e.target.value)}
-            value={name}
-          />
+          <input type="text" required onChange={(e) => setName(e.target.value)} value={name} />
         </label>
         <label>
           <div>Amount ($):</div>
@@ -109,11 +104,7 @@ export default function ExpenseTrackerForm() {
         <label>
           {/* optional for user */}
           <div>Note:</div>
-          <input
-            type="text"
-            onChange={(e) => setNote(e.target.value)}
-            value={note}
-          />
+          <input type="text" onChange={(e) => setNote(e.target.value)} value={note} />
         </label>
 
         <br />
