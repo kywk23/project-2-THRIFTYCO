@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
+import { onValue } from "firebase/database";
 import { database } from "../firebase";
-import { ref, push, set, update, onChildAdded } from "firebase/database";
+import { ref, push } from "firebase/database";
 
 export default function CreateGroup() {
   // Group Creation states (TO ADD: multiple groups)
@@ -8,7 +9,7 @@ export default function CreateGroup() {
   const [groupCreated, setGroupCreated] = useState(false);
   const [activeGroup, setActiveGroup] = useState(null);
   const [groupList, setGroupList] = useState([]);
-  const [currentSnapShotKey, setCurrentSnapShotKey] = useState(null);
+  const [currentGroupSnapShotKey, setCurrentGroupSnapShotKey] = useState(null);
   //Members states
   const [members, setMembers] = useState([]);
   const [memberName, setMemberName] = useState("");
@@ -32,24 +33,45 @@ export default function CreateGroup() {
       groupName: groupName,
     }).then((snapshot) => {
       console.log(snapshot.key);
-      setCurrentSnapShotKey(snapshot.key);
+      setCurrentGroupSnapShotKey(snapshot.key);
+      setActiveGroup(snapshot.key);
     });
   };
 
+  useEffect(() => {
+    console.log(activeGroup);
+    const groupListRef = ref(database, DB_GROUPS_KEY);
+    onValue(groupListRef, (snapshot) => {
+      const groupsData = snapshot.val();
+      if (groupsData) {
+        const groupsArray = Object.keys(groupsData).map((key) => ({
+          id: key,
+          name: groupsData[key].groupName,
+        }));
+        setGroupList(groupsArray);
+      } else {
+        setGroupList([]);
+      }
+    });
+  }, [activeGroup]);
+
   const handleAddMember = () => {
-    const memberRef = ref(database, `${DB_GROUPS_KEY}/${currentSnapShotKey}/members`);
-    // use UID of original group
-    const newMemberRef = push(memberRef, {
-      member: memberName,
-    })
-      .then(() => {
-        console.log(memberName);
-        setMembers((prevMembers) => [...prevMembers, memberName]);
-        setMemberName("");
+    if (activeGroup) {
+      const memberRef = ref(database, `${DB_GROUPS_KEY}/${activeGroup}/members`);
+      const newMemberRef = push(memberRef, {
+        member: memberName,
       })
-      .catch((error) => {
-        console.log(error);
-      });
+        .then(() => {
+          setMembers((prevMembers) => [...prevMembers, memberName]);
+          setMemberName("");
+          console.log(members);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      console.error("No active group selected.");
+    }
   };
 
   const handleAddExpense = () => {
@@ -122,6 +144,13 @@ export default function CreateGroup() {
 
   return (
     <div>
+      {/* Created Groups */}
+      <h1>Recent Groups:</h1>
+      <ul>
+        {groupList.map((group) => (
+          <li key={group.id}>{group.name}</li>
+        ))}
+      </ul>
       {/* Group Creation */}
       <h1>Create Group</h1>
       <label>
@@ -135,20 +164,20 @@ export default function CreateGroup() {
       </label>
       <button onClick={handleAddGroup}>Create Group</button>
       <br />
+      <h2>
+        Active Group:{" "}
+        <select value={activeGroup} onChange={(e) => setActiveGroup(e.target.value)}>
+          <option value="">Select</option>
+          {groupList.map((group) => (
+            <option key={group.id} value={group.id}>
+              {group.name}
+            </option>
+          ))}
+        </select>
+      </h2>
       {/* Group Rendering if True and Members Addition */}
-      {groupCreated && (
+      {activeGroup !== null && (
         <div>
-          <h2>
-            Active Group:{" "}
-            <select value={activeGroup} onChange={(e) => setActiveGroup(e.target.value)}>
-              <option value="">Select</option>
-              {groupList.map((group) => (
-                <option key={group.id} value={group.id}>
-                  {group.name}
-                </option>
-              ))}
-            </select>
-          </h2>
           <label>
             Members:
             <input
@@ -161,11 +190,15 @@ export default function CreateGroup() {
               Add Member
             </button>
           </label>
+          {/* Group Rendering if True and Members Addition */}
           <ul>
-            {members.map((member, index) => (
-              <li key={index}>{member}</li>
-            ))}
+            {members
+              .filter((member) => member.groupKey === currentGroupSnapShotKey)
+              .map((member, index) => (
+                <li key={index}>{member.memberName}</li>
+              ))}
           </ul>
+
           {/* Expense Addition */}
           <form onSubmit={handleAddExpense}>
             <label>
@@ -197,8 +230,8 @@ export default function CreateGroup() {
               <select value={inputPaidBy} onChange={(e) => setInputPaidBy(e.target.value)}>
                 <option value="">Select</option>
                 {members.map((member) => (
-                  <option key={member} value={member}>
-                    {member}
+                  <option key={member.id} value={member.memberName}>
+                    {member.memberName}
                   </option>
                 ))}
               </select>
