@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { database } from "../firebase.jsx";
-import { ref, push, update, onValue } from "firebase/database";
+import { ref, push, update, onValue, remove } from "firebase/database";
 
 // npm package: date picker
 import DatePicker from "react-date-picker";
@@ -15,6 +15,7 @@ export default function ExpenseTrackerForm() {
   const [categoryField, setCategoryField] = useState(""); // Items in the category label
   const [categories, setCategories] = useState([]);
   const [newCategory, setNewCategory] = useState(""); // add new category
+  const [showAddCategoryModal, setShowAddCategoryModal] = useState(false); //pop up for category
 
   const handleDateChange = (date) => {
     setSelectedDate(date.toDateString());
@@ -67,10 +68,19 @@ export default function ExpenseTrackerForm() {
     } else console.log("category is empty or already exists.");
   };
 
-  useEffect(() => {
-    const categoriesRef = ref(database, "expenses-categories");
-    const defaultCategories = ["Food", "Bills", "Transportation"]; //default categories for all users
+  const handleOpenModal = () => {
+    setShowAddCategoryModal(true);
+    console.log("open");
+  };
 
+  const handleCloseModal = () => {
+    setShowAddCategoryModal(false);
+    console.log("close");
+  };
+
+  useEffect(() => {
+    const defaultCategories = ["Food", "Transportation"]; //default categories for all users
+    const categoriesRef = ref(database, "expenses-categories");
     //fetch categories from Firebase when the component mounts
     onValue(categoriesRef, (snapshot) => {
       const categoriesData = snapshot.val();
@@ -99,6 +109,44 @@ export default function ExpenseTrackerForm() {
       }
     });
   }, []);
+
+  //allow user to delete categories
+  const handleDelete = (categoryToDelete) => {
+    const categoryRefToDelete = ref(
+      database,
+      "expenses-categories/" + categoryToDelete
+    );
+    remove(categoryRefToDelete)
+      .then(() => {
+        const updatedCategories = categories.filter(
+          (category) => category !== categoryToDelete
+        );
+        setCategories(updatedCategories);
+        console.log("Category deleted");
+      })
+      .catch((error) => {
+        console.error("Delete category error", error);
+      });
+  };
+
+  // capitalize the first letter of a category
+  const capitalizeCategory = (category) => {
+    return category.charAt(0).toUpperCase() + category.slice(1).toLowerCase();
+  };
+
+  //sort category from a - z
+  const renderCategories = (categories) => {
+    return categories
+      .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
+      .map((category, index) => (
+        <li key={index}>
+          {capitalizeCategory(category)}
+          <button className="delete" onClick={() => handleDelete(category)}>
+            Delete
+          </button>
+        </li>
+      ));
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -165,26 +213,20 @@ export default function ExpenseTrackerForm() {
             <option value="" disabled>
               Select category
             </option>
-            {categories.map((cat, index) => (
-              <option key={index} value={cat}>
+            {categories.map((category, index) => (
+              <option key={index} value={category}>
                 {/* standardise appearance of text on frontend*/}
-                {cat.charAt(0).toUpperCase() + cat.slice(1).toLowerCase()}
+                {capitalizeCategory(category)}
               </option>
             ))}
           </select>
         </label>
-        <label>
-          <div>Add New Category:</div>
-          <input
-            type="text"
-            value={newCategory}
-            onChange={(e) => setNewCategory(e.target.value)}
-            placeholder="Enter new category"
-          />
-          <button type="button" onClick={handleAddCategory}>
-            Add Category
-          </button>
-        </label>
+
+        <div>Add New Category:</div>
+        <button type="button" onClick={handleOpenModal}>
+          Add Category
+        </button>
+
         <label>
           <div>Note:</div>
           <input
@@ -196,6 +238,27 @@ export default function ExpenseTrackerForm() {
         <br />
         <button className="button">Add Transaction</button>
       </form>
+      <br />
+      {/* must be outside the form to stop the trigger of "required" */}
+      {showAddCategoryModal ? (
+        <div className="modal-background">
+          <div className="modal-content">
+            <button className="close" onClick={handleCloseModal}>
+              Close
+            </button>
+            <h2>Add New Category</h2>
+            <input
+              type="text"
+              value={newCategory}
+              onChange={(e) => setNewCategory(e.target.value)}
+              placeholder="Enter new category"
+            />
+            <button onClick={handleAddCategory}>Add</button>
+            <p> Existing Categories: </p>
+            <ul>{renderCategories(categories)}</ul>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }
