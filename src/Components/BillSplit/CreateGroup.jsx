@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { database } from "../firebase";
-import { ref, push, set, update } from "firebase/database";
+import { ref, push, set, update, onChildAdded } from "firebase/database";
 
 export default function CreateGroup() {
   // Group Creation states (TO ADD: multiple groups)
@@ -8,6 +8,7 @@ export default function CreateGroup() {
   const [groupCreated, setGroupCreated] = useState(false);
   const [activeGroup, setActiveGroup] = useState(null);
   const [groupList, setGroupList] = useState([]);
+  const [currentSnapShotKey, setCurrentSnapShotKey] = useState(null);
   //Members states
   const [members, setMembers] = useState([]);
   const [memberName, setMemberName] = useState("");
@@ -17,21 +18,27 @@ export default function CreateGroup() {
   const [inputAmount, setInputAmount] = useState("");
   const [inputPaidBy, setInputPaidBy] = useState("");
 
-  const handleAddGroup = (e) => {
+  const DB_GROUPS_KEY = "all-groups";
+
+  const handleAddGroup = () => {
     const newGroup = {
       name: groupName,
     };
     setGroupList((prevGroupList) => [...prevGroupList, newGroup]);
     setGroupName("");
     setGroupCreated(true);
-    const groupListRef = ref(database, `All-Groups`);
+    const groupListRef = ref(database, DB_GROUPS_KEY);
     const newGroupRef = push(groupListRef, {
       groupName: groupName,
+    }).then((snapshot) => {
+      console.log(snapshot.key);
+      setCurrentSnapShotKey(snapshot.key);
     });
   };
 
-  const handleAddMember = (e) => {
-    const memberRef = ref(database, `All-Groups/${activeGroup}/members`);
+  const handleAddMember = () => {
+    const memberRef = ref(database, `${DB_GROUPS_KEY}/${currentSnapShotKey}/members`);
+    // use UID of original group
     const newMemberRef = push(memberRef, {
       member: memberName,
     })
@@ -96,6 +103,7 @@ export default function CreateGroup() {
   //     add a transaction from maxDebtor to maxCreditor with minAmount to transactions
   //   return transactions
 
+  // obc = {A: 100, B: 200, C: 300}
   // function splitTheBill(obj) {
   //   var total = 0;
   //   Object.keys(obj).forEach(function (key) {
@@ -109,7 +117,7 @@ export default function CreateGroup() {
   //     result[key] = average - obj[key];
   //   });
 
-  //   return result;
+  //   return result; -100, 0, 100
   // }
 
   return (
