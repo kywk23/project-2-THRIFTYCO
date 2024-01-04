@@ -1,9 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { onValue } from "firebase/database";
+import { database } from "../firebase";
+import { ref, push } from "firebase/database";
 
 export default function CreateGroup() {
   // Group Creation states (TO ADD: multiple groups)
   const [groupName, setGroupName] = useState("");
   const [groupCreated, setGroupCreated] = useState(false);
+  const [activeGroup, setActiveGroup] = useState(null);
+  const [groupList, setGroupList] = useState([]);
+  const [currentGroupSnapShotKey, setCurrentGroupSnapShotKey] = useState(null);
   //Members states
   const [members, setMembers] = useState([]);
   const [memberName, setMemberName] = useState("");
@@ -13,16 +19,59 @@ export default function CreateGroup() {
   const [inputAmount, setInputAmount] = useState("");
   const [inputPaidBy, setInputPaidBy] = useState("");
 
-  const handleAddGroup = (e) => {
-    e.preventDefault();
-    console.log(groupName);
+  const DB_GROUPS_KEY = "all-groups";
+
+  const handleAddGroup = () => {
+    const newGroup = {
+      name: groupName,
+    };
+    setGroupList((prevGroupList) => [...prevGroupList, newGroup]);
+    setGroupName("");
     setGroupCreated(true);
+    const groupListRef = ref(database, DB_GROUPS_KEY);
+    const newGroupRef = push(groupListRef, {
+      groupName: groupName,
+    }).then((snapshot) => {
+      console.log(snapshot.key);
+      setCurrentGroupSnapShotKey(snapshot.key);
+      setActiveGroup(snapshot.key);
+    });
   };
 
+  useEffect(() => {
+    console.log(activeGroup);
+    const groupListRef = ref(database, DB_GROUPS_KEY);
+    onValue(groupListRef, (snapshot) => {
+      const groupsData = snapshot.val();
+      if (groupsData) {
+        const groupsArray = Object.keys(groupsData).map((key) => ({
+          id: key,
+          name: groupsData[key].groupName,
+        }));
+        setGroupList(groupsArray);
+      } else {
+        setGroupList([]);
+      }
+    });
+  }, [activeGroup]);
+
   const handleAddMember = () => {
-    setMembers([...members, memberName]);
-    console.log("Members:", members);
-    setMemberName("");
+    if (activeGroup) {
+      const memberRef = ref(database, `${DB_GROUPS_KEY}/${activeGroup}/members`);
+      const newMemberRef = push(memberRef, {
+        member: memberName,
+      })
+        .then(() => {
+          setMembers((prevMembers) => [...prevMembers, memberName]);
+          setMemberName("");
+          console.log(members);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      console.error("No active group selected.");
+    }
   };
 
   const handleAddExpense = () => {
@@ -76,10 +125,32 @@ export default function CreateGroup() {
   //     add a transaction from maxDebtor to maxCreditor with minAmount to transactions
   //   return transactions
 
-  // Smallest num in paidBy, will pay other users;
-  // paying amount =
+  // obc = {A: 100, B: 200, C: 300}
+  // function splitTheBill(obj) {
+  //   var total = 0;
+  //   Object.keys(obj).forEach(function (key) {
+  //     total += obj[key];
+  //   });
+
+  //   var average = total / Object.keys(obj).length;
+
+  //   var result = {};
+  //   Object.keys(obj).forEach(function (key) {
+  //     result[key] = average - obj[key];
+  //   });
+
+  //   return result; -100, 0, 100
+  // }
+
   return (
     <div>
+      {/* Created Groups */}
+      <h1>Recent Groups:</h1>
+      <ul>
+        {groupList.map((group) => (
+          <li key={group.id}>{group.name}</li>
+        ))}
+      </ul>
       {/* Group Creation */}
       <h1>Create Group</h1>
       <label>
@@ -93,10 +164,20 @@ export default function CreateGroup() {
       </label>
       <button onClick={handleAddGroup}>Create Group</button>
       <br />
+      <h2>
+        Active Group:{" "}
+        <select value={activeGroup} onChange={(e) => setActiveGroup(e.target.value)}>
+          <option value="">Select</option>
+          {groupList.map((group) => (
+            <option key={group.id} value={group.id}>
+              {group.name}
+            </option>
+          ))}
+        </select>
+      </h2>
       {/* Group Rendering if True and Members Addition */}
-      {groupCreated && (
+      {activeGroup !== null && (
         <div>
-          <h2>Group Name: {groupName}</h2>
           <label>
             Members:
             <input
@@ -109,13 +190,17 @@ export default function CreateGroup() {
               Add Member
             </button>
           </label>
+          {/* Group Rendering if True and Members Addition */}
           <ul>
-            {members.map((member, index) => (
-              <li key={index}>{member}</li>
-            ))}
+            {members
+              .filter((member) => member.groupKey === currentGroupSnapShotKey)
+              .map((member, index) => (
+                <li key={index}>{member.memberName}</li>
+              ))}
           </ul>
+
           {/* Expense Addition */}
-          <form>
+          <form onSubmit={handleAddExpense}>
             <label>
               Expenses:
               <input
@@ -145,15 +230,13 @@ export default function CreateGroup() {
               <select value={inputPaidBy} onChange={(e) => setInputPaidBy(e.target.value)}>
                 <option value="">Select</option>
                 {members.map((member) => (
-                  <option key={member} value={member}>
-                    {member}
+                  <option key={member.id} value={member.memberName}>
+                    {member.memberName}
                   </option>
                 ))}
               </select>
             </label>
-            <button type="button" onClick={handleAddExpense}>
-              Add Expense
-            </button>
+            <button type="submit">Add Expense</button>
           </form>
         </div>
       )}
@@ -161,7 +244,7 @@ export default function CreateGroup() {
       Group Expenses:
       <ul>
         {expenses.map((expense, index) => (
-          <li key={index}>
+          <li key={expense.id}>
             {expense.Name} - ${expense.Amount}, paid by {expense.PaidBy}
           </li>
         ))}

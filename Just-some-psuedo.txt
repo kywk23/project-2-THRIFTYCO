@@ -72,5 +72,5 @@ Firebase
  - How to see only your "own" account data?
 
 
-Link Routing for App
--
+BUGS TO BE FIXED
+1. 
