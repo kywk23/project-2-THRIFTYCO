@@ -7,6 +7,8 @@ import DatePicker from "react-date-picker";
 import "react-date-picker/dist/DatePicker.css";
 import "react-calendar/dist/Calendar.css";
 
+import CurrencyConversion from "./CurrencyConversion.jsx";
+
 export default function ExpenseTrackerForm() {
   const [name, setName] = useState(""); // input transaction name
   const [amount, setAmount] = useState(""); // input number
@@ -16,6 +18,7 @@ export default function ExpenseTrackerForm() {
   const [categories, setCategories] = useState([]);
   const [newCategory, setNewCategory] = useState(""); // add new category
   const [showAddCategoryModal, setShowAddCategoryModal] = useState(false); //pop up for category
+  const [showCurrencyModal, setShowCurrencyModal] = useState(false); // pop up for conversion of currency
 
   const handleDateChange = (date) => {
     setSelectedDate(date.toDateString());
@@ -68,12 +71,12 @@ export default function ExpenseTrackerForm() {
     } else console.log("category is empty or already exists.");
   };
 
-  const handleOpenModal = () => {
+  const handleOpenCategoryModal = () => {
     setShowAddCategoryModal(true);
     console.log("open");
   };
 
-  const handleCloseModal = () => {
+  const handleCloseCategoryModal = () => {
     setShowAddCategoryModal(false);
     console.log("close");
   };
@@ -148,6 +151,16 @@ export default function ExpenseTrackerForm() {
       ));
   };
 
+  const handleOpenCurrencyModal = () => {
+    setShowCurrencyModal(true);
+    console.log("Currency pop-up: open");
+  };
+
+  const handleCloseCurrencyModal = () => {
+    setShowCurrencyModal(false);
+    console.log("Currency pop-up: close");
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const expenseRef = ref(database, "personal-expenses");
@@ -207,6 +220,13 @@ export default function ExpenseTrackerForm() {
             value={amount}
           />
         </label>
+        <br />
+
+        {/* <div>Convert Currency</div> */}
+        <button type="button" onClick={handleOpenCurrencyModal}>
+          Convert Currency
+        </button>
+
         <label>
           <div>Category:</div>
           <select value={categoryField} onChange={handleCategoryChange}>
@@ -222,9 +242,9 @@ export default function ExpenseTrackerForm() {
           </select>
         </label>
 
-        <div>Add New Category:</div>
-        <button type="button" onClick={handleOpenModal}>
-          Add Category
+        <div>Add/Edit Category:</div>
+        <button type="button" onClick={handleOpenCategoryModal}>
+          Add/Edit Category
         </button>
 
         <label>
@@ -243,10 +263,10 @@ export default function ExpenseTrackerForm() {
       {showAddCategoryModal ? (
         <div className="modal-background">
           <div className="modal-content">
-            <button className="close" onClick={handleCloseModal}>
+            <button className="close" onClick={handleCloseCategoryModal}>
               Close
             </button>
-            <h2>Add New Category</h2>
+            <h2>Add/Edit New Category</h2>
             <input
               type="text"
               value={newCategory}
@@ -259,6 +279,11 @@ export default function ExpenseTrackerForm() {
           </div>
         </div>
       ) : null}
+      <br />
+      <CurrencyConversion
+        showCurrencyModal={showCurrencyModal}
+        handleCloseCurrencyModal={handleCloseCurrencyModal}
+      />
     </div>
   );
 }

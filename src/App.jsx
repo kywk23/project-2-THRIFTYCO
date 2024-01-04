@@ -12,7 +12,7 @@ function App() {
       {/* <LandingPage />
       <ErrorPage /> */}
       {/* <LogInSignUp /> */}
-      {/* <ExpenseTracker /> */}
+      <ExpenseTracker />
       <CreateGroup />
     </>
   );
