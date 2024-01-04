@@ -81,5 +81,3 @@ export default function BillSplitGroups() {
     </div>
   );
 }
-
-// All headers are <h2>

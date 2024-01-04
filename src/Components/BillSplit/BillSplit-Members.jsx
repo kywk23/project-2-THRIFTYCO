@@ -8,36 +8,68 @@ export default function BillSplitMembers({ activeGroup }) {
   const [memberName, setMemberName] = useState("");
   const [memberSnapShotKey, setMemberSnapShotKey] = useState("");
 
-  const DB_GROUPS_KEY = "all-groups";
   // //Expense states
-  // const [expenses, setExpenses] = useState([]);
-  // const [expenseName, setExpenseName] = useState("");
-  // const [inputAmount, setInputAmount] = useState("");
-  // const [inputPaidBy, setInputPaidBy] = useState("");
+  const [expenses, setExpenses] = useState([]);
+  const [expenseName, setExpenseName] = useState("");
+  const [inputAmount, setInputAmount] = useState("");
+  const [inputPaidBy, setInputPaidBy] = useState("");
+
+  // Database keys
+  const DB_GROUPS_KEY = "all-groups";
 
   const handleAddMember = async (e, activeGroup) => {
+    if (activeGroup === "") {
+      alert("A Group is not selected for adding members.\nPlease select a group first.");
+      return;
+    } else if (memberName === "") {
+      alert("Please enter a member name.");
+      return;
+    }
+
     e.preventDefault();
     try {
-      console.log(`bfore await - Curent active group:`, activeGroup);
       const memberRef = ref(database, `${DB_GROUPS_KEY}/${activeGroup}/members`);
       const newMemberRef = await push(memberRef, {
         memberName: memberName,
       });
-      console.log(`after await - Curent active group:`, activeGroup);
-      console.log("Member added:", newMemberRef.key);
       setMemberSnapShotKey(newMemberRef.key);
     } catch (error) {
-      console.error("Error adding member:", error.message);
+      console.error(error.message);
     }
     setMemberName("");
   };
 
   useEffect(() => {
     console.log(`Curent active group:`, activeGroup);
+    const memberListRef = ref(database, `${DB_GROUPS_KEY}/${activeGroup}/members`);
+    onValue(memberListRef, (snapshot) => {
+      const membersData = snapshot.val();
+      if (membersData) {
+        const membersArray = Object.keys(membersData).map((key) => ({
+          id: key,
+          memberName: membersData[key].memberName,
+        }));
+        setMembers(membersArray);
+      }
+    });
   }, [activeGroup]);
 
+  const handleAddExpense = () => {
+    console.log("Expense Name:", expenseName);
+    console.log("Amount:", inputAmount);
+    console.log("Paid By:", inputPaidBy);
+    const newExpense = {
+      Name: expenseName,
+      Amount: inputAmount,
+      PaidBy: inputPaidBy,
+    };
+    setExpenses([...expenses, newExpense]);
+    setExpenseName("");
+    setInputAmount("");
+    setInputPaidBy("");
+  };
+
   // console.error("No active group selected.");
-  // alert("A Group is not selected for adding members.\nPlease select a group first.");
 
   // if (activeGroup && memberSnapShotKey) {
   //   const memberRef = ref(
@@ -68,22 +100,7 @@ export default function BillSplitMembers({ activeGroup }) {
   //   const pricePerPax = totalAmount / numberOfMembers;
   //   return pricePerPax;
   // };
-  // const handleAddExpense = () => {
-  //   console.log("Expense Name:", expenseName);
-  //   console.log("Amount:", inputAmount);
-  //   console.log("Paid By:", inputPaidBy);
-  //   const newExpense = {
-  //     Name: expenseName,
-  //     Amount: inputAmount,
-  //     PaidBy: inputPaidBy,
-  //   };
-  //   setExpenses([...expenses, newExpense]);
-  //   setExpenseName("");
-  //   setInputAmount("");
-  //   setInputPaidBy("");
-  //   pricePerPax();
-  //   console.log(pricePerPax());
-  // };
+
   return (
     <div>
       <label>
@@ -105,6 +122,7 @@ export default function BillSplitMembers({ activeGroup }) {
           <li key={member.id}>{member.memberName}</li>
         ))}
       </ul>
+
       {/* Expense Addition */}
       {/* <form onSubmit={handleAddExpense}>
         <label>
