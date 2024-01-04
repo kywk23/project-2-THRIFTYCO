@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { onValue, ref, push } from "firebase/database";
 import { database } from "../firebase";
+import BillSplitMembers from "./BillSplit-Members";
 
 export default function BillSplitGroups() {
   // Group Creation states
   const [groupName, setGroupName] = useState("");
   const [activeGroup, setActiveGroup] = useState("");
   const [groupList, setGroupList] = useState([]);
-  const [currentGroupSnapShotKey, setCurrentGroupSnapShotKey] = useState(null);
+  // const [currentGroupSnapShotKey, setCurrentGroupSnapShotKey] = useState(null);
 
   const DB_GROUPS_KEY = "all-groups";
 
@@ -18,19 +19,20 @@ export default function BillSplitGroups() {
       const snapshot = await push(groupListRef, {
         groupName: groupName,
       });
-      setCurrentGroupSnapShotKey(snapshot.key);
+      // setCurrentGroupSnapShotKey(snapshot.key);
       setActiveGroup(snapshot.key);
-      setGroupName("");
     } catch (error) {
       console.error("Error adding group:", error.message);
     }
+    setGroupName("");
   };
 
   useEffect(() => {
     const groupListRef = ref(database, DB_GROUPS_KEY);
     onValue(groupListRef, (snapshot) => {
       const groupsData = snapshot.val();
-      console.log(`Groups Data:`, groupsData);
+      // console.log(`Groups Data:`, groupsData);
+      // console.log(`Active Group:`, activeGroup);
       if (groupsData) {
         const groupsArray = Object.keys(groupsData).map((key) => ({
           id: key,
@@ -43,13 +45,6 @@ export default function BillSplitGroups() {
 
   return (
     <div>
-      {/* Created Groups */}
-      <h2>Recent Groups:</h2>
-      <ul>
-        {groupList.map((group) => (
-          <li key={group.id}>{group.name}</li>
-        ))}
-      </ul>
       {/* Group Creation */}
       <h2>Create Group</h2>
       <label>
@@ -63,6 +58,14 @@ export default function BillSplitGroups() {
       </label>
       <button onClick={handleAddGroup}>Create Group</button>
       <br />
+      {/* Created Groups */}
+      <h2>Recent Groups:</h2>
+      <ul>
+        {groupList.map((group) => (
+          <li key={group.id}>{group.name}</li>
+        ))}
+      </ul>
+      {/* Active Group */}
       <h2>
         Active Group:
         <select value={activeGroup} onChange={(e) => setActiveGroup(e.target.value)}>
@@ -74,6 +77,7 @@ export default function BillSplitGroups() {
           ))}
         </select>
       </h2>
+      <BillSplitMembers activeGroup={activeGroup} />
     </div>
   );
 }
