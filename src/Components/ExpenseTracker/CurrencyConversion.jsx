@@ -33,13 +33,12 @@ export default function CurrencyConversion({
     }
   }, [showCurrencyModal]);
 
-  // Conversion
-  // need details from currency to SGD first
-  // conversion - base is foreign currency, currency is sgd (eg. usd 1 - sgd 1.33)
-  // https://api.freecurrencyapi.com/v1/latest?apikey=<key>&currencies=SGD&base_currency=${fromCurrency}
-  // from foreign currency multiply to SGD rate. eg. usd 1 * sgd 1.33 = converted sgd = 1.33
-  // push converted amt of 1.33 to expenses (if users want to push)
-  // display converted amount (SGD) to user
+  // Conversion Logic
+  // fetch details from the specified currency to SGD first
+  // conversion URL base_currency is the foreign currency; set the target currency to SGD
+  // calculation: foreign currency amount * SGD rate (e.g., USD 1 * SGD 1.33 = expenses in SGD)
+  // display the converted amount (in SGD) to the user
+  // allow the user to add the converted amount to the expense tracker - not done
 
   const calculateConversion = () => {
     let conversion_URL = `${API_URL}&currencies=SGD&base_currency=${fromCurrency}`;
@@ -57,7 +56,6 @@ export default function CurrencyConversion({
           //input amount * rate
           const calConversion = amount * rate;
           setConvertedAmount(calConversion);
-          console.log("converted amt:", calConversion);
           console.log("converted amt:", convertedAmount);
         })
         .catch((error) => {
