@@ -8,8 +8,8 @@ export default function BillSplitGroups() {
   const [groupName, setGroupName] = useState("");
   const [activeGroup, setActiveGroup] = useState("");
   const [groupList, setGroupList] = useState([]);
-  // const [currentGroupSnapShotKey, setCurrentGroupSnapShotKey] = useState(null);
 
+  // Database keys
   const DB_GROUPS_KEY = "all-groups";
 
   const handleAddGroup = async (e) => {
@@ -19,7 +19,6 @@ export default function BillSplitGroups() {
       const snapshot = await push(groupListRef, {
         groupName: groupName,
       });
-      // setCurrentGroupSnapShotKey(snapshot.key);
       setActiveGroup(snapshot.key);
     } catch (error) {
       console.error("Error adding group:", error.message);
@@ -31,8 +30,6 @@ export default function BillSplitGroups() {
     const groupListRef = ref(database, DB_GROUPS_KEY);
     onValue(groupListRef, (snapshot) => {
       const groupsData = snapshot.val();
-      // console.log(`Groups Data:`, groupsData);
-      // console.log(`Active Group:`, activeGroup);
       if (groupsData) {
         const groupsArray = Object.keys(groupsData).map((key) => ({
           id: key,
@@ -65,7 +62,7 @@ export default function BillSplitGroups() {
           <li key={group.id}>{group.name}</li>
         ))}
       </ul>
-      {/* Active Group */}
+      {/* Active Group Selector*/}
       <h2>
         Active Group:
         <select value={activeGroup} onChange={(e) => setActiveGroup(e.target.value)}>

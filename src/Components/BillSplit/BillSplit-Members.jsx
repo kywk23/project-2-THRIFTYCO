@@ -25,7 +25,6 @@ export default function BillSplitMembers({ activeGroup }) {
       alert("Please enter a member name.");
       return;
     }
-
     e.preventDefault();
     try {
       const memberRef = ref(database, `${DB_GROUPS_KEY}/${activeGroup}/members`);
@@ -40,7 +39,6 @@ export default function BillSplitMembers({ activeGroup }) {
   };
 
   useEffect(() => {
-    console.log(`Curent active group:`, activeGroup);
     const memberListRef = ref(database, `${DB_GROUPS_KEY}/${activeGroup}/members`);
     onValue(memberListRef, (snapshot) => {
       const membersData = snapshot.val();
@@ -54,45 +52,44 @@ export default function BillSplitMembers({ activeGroup }) {
     });
   }, [activeGroup]);
 
-  const handleAddExpense = () => {
-    console.log("Expense Name:", expenseName);
-    console.log("Amount:", inputAmount);
-    console.log("Paid By:", inputPaidBy);
+  useEffect(() => {
+    console.log(expenses);
+    const expensesRef = ref(database, `${DB_GROUPS_KEY}/${activeGroup}/expenses`);
+    onValue(expensesRef, (snapshot) => {
+      const expensesData = snapshot.val();
+      if (expensesData) {
+        const expensesArray = Object.keys(expensesData).map((key) => ({
+          id: key,
+          Name: expensesData[key].Name,
+          Amount: expensesData[key].Amount,
+          PaidBy: expensesData[key].PaidBy,
+        }));
+        setExpenses(expensesArray);
+        console.log(expensesData);
+      }
+    });
+  }, [activeGroup]);
+
+  const handleAddExpense = async (e, activeGroup) => {
+    e.preventDefault();
+    console.log(`before try block`, activeGroup);
     const newExpense = {
       Name: expenseName,
       Amount: inputAmount,
       PaidBy: inputPaidBy,
     };
-    setExpenses([...expenses, newExpense]);
+    try {
+      console.log(activeGroup);
+      setExpenses([...expenses, newExpense]);
+      const expenseRef = ref(database, `${DB_GROUPS_KEY}/${activeGroup}/expenses`);
+      const newExpenseRef = await push(expenseRef, newExpense);
+    } catch (error) {
+      console.error(error.message);
+    }
     setExpenseName("");
     setInputAmount("");
     setInputPaidBy("");
   };
-
-  // console.error("No active group selected.");
-
-  // if (activeGroup && memberSnapShotKey) {
-  //   const memberRef = ref(
-  //     database,
-  //     `${DB_GROUPS_KEY}/${activeGroup}/members/${memberSnapShotKey}`
-  //   );
-  //   console.log(`member snapshot key:`, memberSnapShotKey);
-  //   onValue(memberRef, (snapshot) => {
-  //     const membersData = snapshot.val();
-  //     console.log(membersData);
-  //     if (membersData) {
-  //       // const membersArray = Object.keys(membersData).map((key) => ({
-  //       //   id: key,
-  //       //   name: membersData[key].memberName,
-  //       // }));
-  //       setMembers((prevMembers) => [...prevMembers, { memberName: membersData.memberName }]);
-  //     } else {
-  //       setMembers([]);
-  //     }
-  //   });
-  // } else {
-  //   setMembers([]);
-  // }
 
   // const pricePerPax = () => {
   //   const totalAmount = expenses.reduce((a, b) => a + b.Amount, 0);
@@ -116,61 +113,62 @@ export default function BillSplitMembers({ activeGroup }) {
         </button>
       </label>
       {/* Members rendering based on active group */}
-
+      <h2>Members:</h2>
       <ul>
         {members.map((member) => (
           <li key={member.id}>{member.memberName}</li>
         ))}
       </ul>
-
       {/* Expense Addition */}
-      {/* <form onSubmit={handleAddExpense}>
-        <label>
-          Expenses:
-          <input
-            type="text"
-            required
-            value={expenseName}
-            placeholder="Expense Name"
-            onChange={(e) => setExpenseName(e.target.value)}
-          />
-        </label>
-        <br />
-        <label>
-          Amount:
-          <input
-            type="number"
-            step="0.01" //increament
-            min="0.01" //minimal amount
-            required
-            value={inputAmount}
-            placeholder="Amount"
-            onChange={(e) => setInputAmount(e.target.value)}
-          />
-        </label>
-        <br />
-        <label>
-          Paid By:
-          <select value={inputPaidBy} onChange={(e) => setInputPaidBy(e.target.value)}>
-            <option value="">Select</option>
-            {members.map((member) => (
-              <option key={member.id} value={member.memberName}>
-                {member.memberName}
-              </option>
-            ))}
-          </select>
-        </label>
-        <button type="submit">Add Expense</button>
-      </form> */}
+      {members.length > 0 && activeGroup && (
+        <form onSubmit={(e) => handleAddExpense(e, activeGroup)}>
+          <label>
+            Expenses:
+            <input
+              type="text"
+              required
+              value={expenseName}
+              placeholder="Expense Name"
+              onChange={(e) => setExpenseName(e.target.value)}
+            />
+          </label>
+          <br />
+          <label>
+            Amount:
+            <input
+              type="number"
+              step="0.01" //increament
+              min="0.01" //minimal amount
+              required
+              value={inputAmount}
+              placeholder="Amount"
+              onChange={(e) => setInputAmount(e.target.value)}
+            />
+          </label>
+          <br />
+          <label>
+            Paid By:
+            <select value={inputPaidBy} onChange={(e) => setInputPaidBy(e.target.value)}>
+              <option value="">Select</option>
+              {members.map((member) => (
+                <option key={member.id} value={member.memberName}>
+                  {member.memberName}
+                </option>
+              ))}
+            </select>
+          </label>
+          <button type="submit">Add Expense</button>
+        </form>
+      )}
       <br />
-      {/* Group Expenses:
+      Group Expenses:
       <ul>
         {expenses.map((expense, index) => (
           <li key={expense.id}>
             {expense.Name} - ${expense.Amount}, paid by {expense.PaidBy}
           </li>
         ))}
-      </ul> */}
+      </ul>
       <br />
       {/* Balances: */}
     </div>
