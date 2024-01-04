@@ -49,12 +49,12 @@ export default function CurrencyConversion({
       axios
         .get(conversion_URL)
         .then((response) => {
-          const conversionValue = response.data.data;
-          const rate = Object.values(conversionValue);
-          console.log("chosen curreny rate:", rate); //rates of the currency
+          const exchangeRateValues = response.data.data;
+          const exchangeRate = Object.values(exchangeRateValues);
+          console.log("chosen curreny exchangeRate:", exchangeRate);
           //calculation
-          //input amount * rate
-          const calConversion = amount * rate;
+          //input amount * exchangeRate
+          const calConversion = amount * exchangeRate;
           setConvertedAmount(calConversion);
           console.log("converted amt:", convertedAmount);
         })
