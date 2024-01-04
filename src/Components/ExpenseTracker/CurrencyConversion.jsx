@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-const API_KEY = "fca_live_NvQFhAJ7HtdJEVH8nfNWbHsjiRnRH3t3IsVILyjM";
+const API_KEY = "hid";
 
 export default function CurrencyConversion({
   showCurrencyModal,
