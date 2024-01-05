@@ -91,12 +91,12 @@ export default function BillSplitMembers({ activeGroup }) {
     setInputPaidBy("");
   };
 
-  // const pricePerPax = () => {
-  //   const totalAmount = expenses.reduce((a, b) => a + b.Amount, 0);
-  //   const numberOfMembers = members.length;
-  //   const pricePerPax = totalAmount / numberOfMembers;
-  //   return pricePerPax;
-  // };
+  const pricePerPax = () => {
+    const totalAmount = expenses.reduce((a, b) => a + b.Amount, 0);
+    const numberOfMembers = members.length;
+    const pricePerPax = totalAmount / numberOfMembers;
+    return pricePerPax;
+  };
 
   return (
     <div>
