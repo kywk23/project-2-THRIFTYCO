@@ -7,8 +7,10 @@ const API_URL = `https://api.freecurrencyapi.com/v1/latest?apikey=${API_KEY}`;
 export default function CurrencyConversion({
   showCurrencyModal,
   handleCloseCurrencyModal,
+  handleAmountChange,
+  amount,
 }) {
-  const [amount, setAmount] = useState("");
+  const [toConvertAmount, setToConvertAmount] = useState("");
   const [fromCurrency, setFromCurrency] = useState("");
   const [toCurrency, setToCurrency] = useState("SGD"); //default always set to SGD
   const [convertedAmount, setConvertedAmount] = useState("");
@@ -36,7 +38,7 @@ export default function CurrencyConversion({
 
   // Conversion Logic
   // fetch details from the specified currency to SGD first
-  // conversion URL base_currency is the foreign currency; set the target currency to SGD
+  // conversion URL base_currency is the foreign currency; set the target currency to SGD by default
   // calculation: foreign currency amount * SGD rate (e.g., USD 1 * SGD 1.33 = expenses in SGD)
   // display the converted amount (in SGD) to the user
   // allow the user to add the converted amount to the expense tracker - not done
@@ -46,7 +48,7 @@ export default function CurrencyConversion({
     console.log("conversion URL data", conversion_URL);
 
     //only allow user to convert when fromCurrency and amount is valid
-    if (amount && fromCurrency) {
+    if (toConvertAmount && fromCurrency) {
       axios
         .get(conversion_URL)
         .then((response) => {
@@ -55,9 +57,9 @@ export default function CurrencyConversion({
           console.log("chosen curreny exchangeRate:", exchangeRate);
           //calculation
           //input amount * exchangeRate
-          const calConversion = amount * exchangeRate;
+          const calConversion = toConvertAmount * exchangeRate;
+          //set to 2 decimal points
           setConvertedAmount(calConversion.toFixed(2));
-          console.log("converted amt:", convertedAmount);
         })
         .catch((error) => {
           console.error("Currency conversion page error:", error);
@@ -72,8 +74,10 @@ export default function CurrencyConversion({
     calculateConversion();
   };
 
-  const handleAddToExpenses = () => {
-    console.log(`Adding SGD {convertedAmount} to expenses`);
+  const handleAddToExpensesForm = () => {
+    handleAmountChange(convertedAmount); // Pass the converted amount to Amount in expense tracker form
+    console.log(`Add ${convertedAmount} to expenses tracker form`);
+    setConvertedAmount(""); // Clear converted amount after adding to expenses
   };
 
   return (
@@ -88,8 +92,8 @@ export default function CurrencyConversion({
             <p>Amount to be converted:</p>
             <input
               type="number"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
+              value={toConvertAmount}
+              onChange={(e) => setToConvertAmount(e.target.value)}
               placeholder="Enter amount"
             />
             <p>From</p>
@@ -120,7 +124,7 @@ export default function CurrencyConversion({
 
             <button onClick={handleCalculate}>Calculate</button>
             <br />
-            <button onClick={handleAddToExpenses}>Add to Expenses</button>
+            <button onClick={handleAddToExpensesForm}>Add to Form</button>
           </div>
         </div>
       )}

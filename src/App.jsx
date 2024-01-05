@@ -6,11 +6,7 @@ function App() {
   return (
     <>
       <h1>Money Tracker </h1>
-      {/* <LandingPage />
-      <ErrorPage /> */}
-      {/* <LogInSignUp /> */}
-      {/* <ExpenseTracker /> */}
-      <CreateGroup />
+      <ExpenseTracker />
     </>
   );
 }

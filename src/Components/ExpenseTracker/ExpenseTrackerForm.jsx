@@ -24,8 +24,14 @@ export default function ExpenseTrackerForm() {
     setSelectedDate(date.toDateString());
   };
 
-  const handleAmountChange = (e) => {
-    let inputValue = e.target.value;
+  const handleAmountChange = (valueOrEvent) => {
+    let inputValue = "";
+
+    if (typeof valueOrEvent === "string") {
+      inputValue = valueOrEvent;
+    } else if (valueOrEvent && valueOrEvent.target) {
+      inputValue = valueOrEvent.target.value || "";
+    }
 
     if (inputValue.startsWith(".")) {
       inputValue = `0${inputValue}`;
@@ -37,6 +43,21 @@ export default function ExpenseTrackerForm() {
       setAmount(inputValue);
     }
   };
+
+  // const handleAmountChange = (newValue) => {
+  //   let inputValue =
+  //     typeof newValue === "string" ? newValue : newValue.target.value || "";
+
+  //   if (typeof newValue === "string" && newValue.startsWith(".")) {
+  //     inputValue = `0${newValue}`;
+  //   }
+
+  //   const regex = /^(?!-)\d*(\.\d{0,2})?$/;
+
+  //   if (regex.test(inputValue) || inputValue === "") {
+  //     setAmount(inputValue);
+  //   }
+  // };
 
   const handleCategoryChange = (e) => {
     setCategoryField(e.target.value);
@@ -283,6 +304,7 @@ export default function ExpenseTrackerForm() {
       <CurrencyConversion
         showCurrencyModal={showCurrencyModal}
         handleCloseCurrencyModal={handleCloseCurrencyModal}
+        handleAmountChange={handleAmountChange}
       />
     </div>
   );
