@@ -9,6 +9,7 @@ function App() {
       {/* <LogInSignUp /> */}
       {/* <ExpenseTracker /> */}
       <BillSplitGroups />
+      <ExpenseTracker />
     </>
   );
 }
