@@ -11,7 +11,6 @@ export default function ExpenseTracker() {
       <ExpenseTrackerForm />
       <br />
       <div className="class">Transation List</div>
-      <ExpensesTotalAmt />
       <ExpenseTrackerTransaction />
     </>
   );
