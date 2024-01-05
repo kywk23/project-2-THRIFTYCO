@@ -1,7 +1,4 @@
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-} from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
 import { auth, updateProfileInfo } from "./firebase.jsx";
 
@@ -70,7 +67,3 @@ export default function LogInSignUp() {
     </div>
   );
 }
-// test@test.com
-// testtest
-// test1
-// https://firebase.google.com/docs/auth/web/manage-users

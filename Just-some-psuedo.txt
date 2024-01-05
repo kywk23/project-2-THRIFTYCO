@@ -64,6 +64,49 @@ States required / Tracking:
   - Input fields for bill details (total amount, items, participants, etc.).
   - "Split Bill" Button
   - Display calculated splits.
+    // put to RTDB
+  // 1) render total (inputAmount) by respective paidBy
+
+  //  function splitBill(users, expenses)
+  //   // users is an array of user objects with name and balance properties
+  //   // expenses is an array of expense objects with name, amount, paidBy and splitBy properties
+  //   // update the balance of each user based on the expenses
+  //   for each expense in expenses
+  //     let payer = expense.paidBy
+  //     let amount = expense.amount
+  //     let receivers = expense.splitBy
+  //     let share = amount / receivers.length
+  //     for each receiver in receivers
+  //       if receiver is not payer
+  //         receiver.balance -= share
+  //         payer.balance += share
+  //   // find the minimum number of transactions to settle the debts
+  //   let transactions = []
+  //   while users have non-zero balances
+  //     let maxCreditor = user with maximum positive balance
+  //     let maxDebtor = user with maximum negative balance
+  //     let minAmount = minimum of maxCreditor.balance and -maxDebtor.balance
+  //     maxDebtor.balance += minAmount
+  //     maxCreditor.balance -= minAmount
+  //     add a transaction from maxDebtor to maxCreditor with minAmount to transactions
+  //   return transactions
+
+  // obc = {A: 100, B: 200, C: 300}
+  // function splitTheBill(obj) {
+  //   var total = 0;
+  //   Object.keys(obj).forEach(function (key) {
+  //     total += obj[key];
+  //   });
+
+  //   var average = total / Object.keys(obj).length;
+
+  //   var result = {};
+  //   Object.keys(obj).forEach(function (key) {
+  //     result[key] = average - obj[key];
+  //   });
+
+  //   return result; -100, 0, 100
+  // }
 
 Firebase
 1) Realtime Database
@@ -73,4 +116,3 @@ Firebase
 
 
 BUGS TO BE FIXED
-1. 
