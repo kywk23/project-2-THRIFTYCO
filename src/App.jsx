@@ -6,6 +6,7 @@ import LandingPage from "./Components/LandingPage.jsx";
 import ErrorPage from "./Components/ErrorPage.jsx";
 
 function App() {
+  //hi
   return (
     <>
       <h1>Money Tracker </h1>
