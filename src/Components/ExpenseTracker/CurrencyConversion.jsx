@@ -8,13 +8,26 @@ export default function CurrencyConversion({
   showCurrencyModal,
   handleCloseCurrencyModal,
   handleAmountChange,
-  amount,
 }) {
   const [toConvertAmount, setToConvertAmount] = useState("");
   const [fromCurrency, setFromCurrency] = useState("");
   const [toCurrency, setToCurrency] = useState("SGD"); //default always set to SGD
   const [convertedAmount, setConvertedAmount] = useState("");
   const [currencyOptions, setCurrencyOptions] = useState([]); //list of currency
+
+  const handleAmountToBeConverted = (e) => {
+    let inputValue = e.target.value;
+
+    if (inputValue.startsWith(".")) {
+      inputValue = `0${inputValue}`;
+    }
+
+    const regex = /^(?!-)\d*(\.\d{0,2})?$/;
+
+    if (regex.test(inputValue) || inputValue === "") {
+      setToConvertAmount(inputValue);
+    }
+  };
 
   //display currency in drop down selection
   useEffect(() => {
@@ -58,8 +71,9 @@ export default function CurrencyConversion({
           //calculation
           //input amount * exchangeRate
           const calConversion = toConvertAmount * exchangeRate;
+          const toTwoDecimal = calConversion.toFixed(2);
           //set to 2 decimal points
-          setConvertedAmount(calConversion.toFixed(2));
+          setConvertedAmount(toTwoDecimal);
         })
         .catch((error) => {
           console.error("Currency conversion page error:", error);
@@ -75,9 +89,11 @@ export default function CurrencyConversion({
   };
 
   const handleAddToExpensesForm = () => {
-    handleAmountChange(convertedAmount); // Pass the converted amount to Amount in expense tracker form
+    handleAmountChange(convertedAmount); // pass the converted amount to Amount in expense tracker form
     console.log(`Add ${convertedAmount} to expenses tracker form`);
-    setConvertedAmount(""); // Clear converted amount after adding to expenses
+    setConvertedAmount(""); // clear converted amount after adding to expenses
+    setToConvertAmount(""); // clear to convert amount
+    handleCloseCurrencyModal(); //close window
   };
 
   return (
@@ -92,9 +108,11 @@ export default function CurrencyConversion({
             <p>Amount to be converted:</p>
             <input
               type="number"
+              step="0.01"
+              min="0.01"
+              required
+              onChange={(e) => handleAmountToBeConverted(e)}
               value={toConvertAmount}
-              onChange={(e) => setToConvertAmount(e.target.value)}
-              placeholder="Enter amount"
             />
             <p>From</p>
             <select

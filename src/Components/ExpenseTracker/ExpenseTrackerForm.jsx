@@ -8,6 +8,7 @@ import "react-date-picker/dist/DatePicker.css";
 import "react-calendar/dist/Calendar.css";
 
 import CurrencyConversion from "./CurrencyConversion.jsx";
+import AddEditCategories from "./AddEditCategories.jsx";
 
 export default function ExpenseTrackerForm() {
   const [name, setName] = useState(""); // input transaction name
@@ -16,7 +17,6 @@ export default function ExpenseTrackerForm() {
   const [selectedDate, setSelectedDate] = useState(new Date().toDateString());
   const [categoryField, setCategoryField] = useState(""); // Items in the category label
   const [categories, setCategories] = useState([]);
-  const [newCategory, setNewCategory] = useState(""); // add new category
   const [showAddCategoryModal, setShowAddCategoryModal] = useState(false); //pop up for category
   const [showCurrencyModal, setShowCurrencyModal] = useState(false); // pop up for conversion of currency
 
@@ -24,6 +24,7 @@ export default function ExpenseTrackerForm() {
     setSelectedDate(date.toDateString());
   };
 
+  //allow input value from e and value from currency conversion
   const handleAmountChange = (valueOrEvent) => {
     let inputValue = "";
 
@@ -44,62 +45,18 @@ export default function ExpenseTrackerForm() {
     }
   };
 
-  // const handleAmountChange = (newValue) => {
-  //   let inputValue =
-  //     typeof newValue === "string" ? newValue : newValue.target.value || "";
-
-  //   if (typeof newValue === "string" && newValue.startsWith(".")) {
-  //     inputValue = `0${newValue}`;
-  //   }
-
-  //   const regex = /^(?!-)\d*(\.\d{0,2})?$/;
-
-  //   if (regex.test(inputValue) || inputValue === "") {
-  //     setAmount(inputValue);
-  //   }
-  // };
-
   const handleCategoryChange = (e) => {
     setCategoryField(e.target.value);
   };
 
-  const handleAddCategory = () => {
-    //input validation
-    //change the current category to lowercase for comparison
-    const lowerCaseCategories = categories.map((category) =>
-      category.toLowerCase()
-    );
-    const categoryExists = lowerCaseCategories.includes(
-      newCategory.trim().toLowerCase()
-    );
-
-    //do now allow users to add category if new category is empty or already exists
-    if (newCategory.trim() !== "" && !categoryExists) {
-      const categoriesRef = ref(database, "expenses-categories");
-      const newCategoryData = {};
-      newCategoryData[newCategory] = true;
-
-      update(categoriesRef, newCategoryData)
-        .then(() => {
-          console.log("New category added to Firebase:", newCategory);
-          setCategories([...categories, newCategory]); // Update state with new category
-          setCategoryField(newCategory);
-          setNewCategory("");
-        })
-        .catch((error) => {
-          console.error("Error adding new category to Firebase:", error);
-        });
-    } else console.log("category is empty or already exists.");
-  };
-
   const handleOpenCategoryModal = () => {
     setShowAddCategoryModal(true);
-    console.log("open");
+    console.log("cat open");
   };
 
   const handleCloseCategoryModal = () => {
     setShowAddCategoryModal(false);
-    console.log("close");
+    console.log("cat close");
   };
 
   useEffect(() => {
@@ -134,42 +91,9 @@ export default function ExpenseTrackerForm() {
     });
   }, []);
 
-  //allow user to delete categories
-  const handleDelete = (categoryToDelete) => {
-    const categoryRefToDelete = ref(
-      database,
-      "expenses-categories/" + categoryToDelete
-    );
-    remove(categoryRefToDelete)
-      .then(() => {
-        const updatedCategories = categories.filter(
-          (category) => category !== categoryToDelete
-        );
-        setCategories(updatedCategories);
-        console.log("Category deleted");
-      })
-      .catch((error) => {
-        console.error("Delete category error", error);
-      });
-  };
-
   // capitalize the first letter of a category
   const capitalizeCategory = (category) => {
     return category.charAt(0).toUpperCase() + category.slice(1).toLowerCase();
-  };
-
-  //sort category from a - z
-  const renderCategories = (categories) => {
-    return categories
-      .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
-      .map((category, index) => (
-        <li key={index}>
-          {capitalizeCategory(category)}
-          <button className="delete" onClick={() => handleDelete(category)}>
-            Delete
-          </button>
-        </li>
-      ));
   };
 
   const handleOpenCurrencyModal = () => {
@@ -281,25 +205,15 @@ export default function ExpenseTrackerForm() {
       </form>
       <br />
       {/* must be outside the form to stop the trigger of "required" */}
-      {showAddCategoryModal ? (
-        <div className="modal-background">
-          <div className="modal-content">
-            <button className="close" onClick={handleCloseCategoryModal}>
-              Close
-            </button>
-            <h2>Add/Edit New Category</h2>
-            <input
-              type="text"
-              value={newCategory}
-              onChange={(e) => setNewCategory(e.target.value)}
-              placeholder="Enter new category"
-            />
-            <button onClick={handleAddCategory}>Add</button>
-            <p> Existing Categories: </p>
-            <ul>{renderCategories(categories)}</ul>
-          </div>
-        </div>
-      ) : null}
+
+      <AddEditCategories
+        showAddCategoryModal={showAddCategoryModal}
+        categories={categories}
+        setCategories={setCategories}
+        setCategoryField={setCategoryField}
+        capitalizeCategory={capitalizeCategory}
+        handleCloseCategoryModal={handleCloseCategoryModal}
+      />
       <br />
       <CurrencyConversion
         showCurrencyModal={showCurrencyModal}
