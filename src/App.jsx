@@ -10,11 +10,11 @@ function App() {
   return (
     <>
       <h1>Money Tracker </h1>
-      <LogInSignUp />
+      {/* <LogInSignUp />
       <LandingPage />
-      <ErrorPage />
+      <ErrorPage /> */}
       <ExpenseTracker />
-      <BillSplitGroups />
+      {/* <BillSplitGroups /> */}
     </>
   );
 }
