@@ -9,7 +9,8 @@ export default function CurrencyConversion({
   handleCloseCurrencyModal,
 }) {
   const [amount, setAmount] = useState("");
-  const [fromCurrency, setFromCurrency] = useState(""); // handle input currency
+  const [fromCurrency, setFromCurrency] = useState("");
+  const [toCurrency, setToCurrency] = useState("SGD"); //default always set to SGD
   const [convertedAmount, setConvertedAmount] = useState("");
   const [currencyOptions, setCurrencyOptions] = useState([]); //list of currency
 
@@ -41,7 +42,7 @@ export default function CurrencyConversion({
   // allow the user to add the converted amount to the expense tracker - not done
 
   const calculateConversion = () => {
-    let conversion_URL = `${API_URL}&currencies=SGD&base_currency=${fromCurrency}`;
+    let conversion_URL = `${API_URL}&currencies=${toCurrency}&base_currency=${fromCurrency}`;
     console.log("conversion URL data", conversion_URL);
 
     //only allow user to convert when fromCurrency and amount is valid
@@ -55,7 +56,7 @@ export default function CurrencyConversion({
           //calculation
           //input amount * exchangeRate
           const calConversion = amount * exchangeRate;
-          setConvertedAmount(calConversion);
+          setConvertedAmount(calConversion.toFixed(2));
           console.log("converted amt:", convertedAmount);
         })
         .catch((error) => {
@@ -103,7 +104,20 @@ export default function CurrencyConversion({
                 </option>
               ))}
             </select>
-            <p>To SGD: {convertedAmount}</p>
+            <p>To Converted Amount: {convertedAmount}</p>
+            <p>To</p>
+            <select
+              value={toCurrency}
+              onChange={(e) => setToCurrency(e.target.value)}
+            >
+              <option value="">Choose Currency</option>
+              {currencyOptions.map((currency) => (
+                <option key={currency} value={currency}>
+                  {currency}
+                </option>
+              ))}
+            </select>
+
             <button onClick={handleCalculate}>Calculate</button>
             <br />
             <button onClick={handleAddToExpenses}>Add to Expenses</button>
