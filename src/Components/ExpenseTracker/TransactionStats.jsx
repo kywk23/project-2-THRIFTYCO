@@ -4,7 +4,7 @@ import { ref, onValue } from "firebase/database";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
 ChartJS.register(ArcElement, Tooltip, Legend);
-import { filterTransactionsByMonthAndYear } from "./utilities.js";
+import { filterTransactionsByMonthAndYear } from "./utilities.jsx";
 
 export default function TransactionStats({
   selectedMonth,

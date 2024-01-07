@@ -7,7 +7,7 @@ const filterTransactionsByMonthAndYear = (
 ) => {
   if (!data) return [];
 
-  //to import key along with data
+  //to import key along with data, for the delete function in the list of transaction
   const transactionsArray = Object.keys(data).map((key) => ({
     id: key,
     ...data[key],

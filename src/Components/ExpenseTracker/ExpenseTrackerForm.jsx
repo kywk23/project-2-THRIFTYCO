@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { database } from "../firebase.jsx";
-import { ref, push, update, onValue, remove } from "firebase/database";
+import { ref, push, update, onValue } from "firebase/database";
 
 // npm package: date picker
 import DatePicker from "react-date-picker";
 import "react-date-picker/dist/DatePicker.css";
 import "react-calendar/dist/Calendar.css";
 
+// components
 import CurrencyConversion from "./CurrencyConversion.jsx";
 import AddEditCategories from "./AddEditCategories.jsx";
 

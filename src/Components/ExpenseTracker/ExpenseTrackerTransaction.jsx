@@ -3,7 +3,7 @@ import { database } from "../firebase";
 import { ref, onValue, remove } from "firebase/database";
 import ExpensesTotalAmt from "./ExpensesTotalAmt";
 import TransactionStats from "./TransactionStats";
-import { filterTransactionsByMonthAndYear } from "./utilities.js";
+import { filterTransactionsByMonthAndYear } from "./utilities.jsx";
 
 const TransactionList = () => {
   const [transactions, setTransactions] = useState([]);
