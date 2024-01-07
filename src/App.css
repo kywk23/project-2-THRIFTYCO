@@ -4,3 +4,15 @@
   padding: 2rem;
   text-align: left;
 }
+
+/* test css  */
+
+.navbar {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+
+.nav-link {
+  margin: 0 10px;
+}
