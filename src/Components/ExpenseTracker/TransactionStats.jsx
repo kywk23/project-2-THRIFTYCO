@@ -16,57 +16,58 @@ export default function TransactionStats({
   const [amountByCategory, setAmountByCategory] = useState({});
 
   useEffect(() => {
-    const totalExpenseAmt = ref(database, "personal-expenses");
+    if (showStats) {
+      const totalExpenseAmt = ref(database, "personal-expenses");
 
-    //fetch data and calculate total amount for the selected month and year
-    onValue(totalExpenseAmt, (snapshot) => {
-      const data = snapshot.val();
-      if (data) {
-        //import filter
-        const filteredTransactions = filterTransactionsByMonthAndYear(
-          data,
-          selectedMonth,
-          selectedYear
-        );
+      //fetch data and calculate total amount for the selected month and year
+      onValue(totalExpenseAmt, (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+          //import filter
+          const filteredTransactions = filterTransactionsByMonthAndYear(
+            data,
+            selectedMonth,
+            selectedYear
+          );
 
-        // Calculate total amount for the categories
-        // use hashmap to count amount per category
+          // Calculate total amount for the categories
+          // use hashmap to count amount per category
+          const amountPerCategory = {}; //
 
-        const amountPerCategory = {}; //
+          filteredTransactions.forEach((transaction) => {
+            const category = transaction.categoryField;
 
-        filteredTransactions.forEach((transaction) => {
-          const category = transaction.categoryField;
+            // If category exists in the object, add the transaction amount to its total
+            if (amountPerCategory[category]) {
+              amountPerCategory[category] += Number(transaction.amount);
+            } else {
+              // If category doesn't exist, initialize the total for that category
+              amountPerCategory[category] = Number(transaction.amount);
+            }
+          });
 
-          // If category exists in the object, add the transaction amount to its total
-          if (amountPerCategory[category]) {
-            amountPerCategory[category] += Number(transaction.amount);
-          } else {
-            // If category doesn't exist, initialize the total for that category
-            amountPerCategory[category] = Number(transaction.amount);
-          }
-        });
+          setAmountByCategory(amountPerCategory);
+          console.log("amountPERcat", amountPerCategory);
 
-        setAmountByCategory(amountPerCategory);
-        console.log("amountPERcat", amountPerCategory);
-
-        // Extract category labels from the object keys
-        const categories = Object.keys(amountPerCategory);
-        setLabels(categories);
-        console.log("cat", categories);
-      } else {
-        // no data for the selected month and year
-        setAmountByCategory({});
-        setLabels([]);
-      }
-    });
-  }, [selectedMonth, selectedYear]);
+          // Extract category labels from the object keys
+          const categories = Object.keys(amountPerCategory);
+          setLabels(categories);
+          console.log("cat", categories);
+        } else {
+          // no data for the selected month and year
+          setAmountByCategory({});
+          setLabels([]);
+        }
+      });
+    }
+  }, [selectedMonth, selectedYear, showStats]);
 
   // Prepare data for the pie chart
   const data = {
     labels: labels,
     datasets: [
       {
-        label: "Amount",
+        label: "Amount ($)",
         data: Object.values(amountByCategory),
 
         //to change colour during css implementation
