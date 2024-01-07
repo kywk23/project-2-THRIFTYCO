@@ -13,28 +13,13 @@ export default function ExpensesTotalAmt({ selectedMonth, selectedYear }) {
     onValue(totalExpenseAmt, (snapshot) => {
       const data = snapshot.val();
       if (data) {
-        // const transactionsArray = Object.values(data);
-        // console.log("transaction amt", Object.values(data));
-        //filter transactions for the selected month and year
+        //import - filter transactions for the selected month and year
 
         const filteredTransactions = filterTransactionsByMonthAndYear(
           data,
           selectedMonth,
           selectedYear
         );
-
-        // const filteredTransactions = transactionsArray.filter((transaction) => {
-        //   const transactionMonth = new Date(
-        //     transaction.selectedDate
-        //   ).getMonth();
-        //   const transactionYear = new Date(
-        //     transaction.selectedDate
-        //   ).getFullYear();
-        //   return (
-        //     transactionMonth === selectedMonth &&
-        //     transactionYear === selectedYear
-        //   );
-        // });
 
         // Calculate total amount for the selected month and year
         const total = filteredTransactions.reduce(

@@ -22,9 +22,6 @@ export default function TransactionStats({
     onValue(totalExpenseAmt, (snapshot) => {
       const data = snapshot.val();
       if (data) {
-        // const transactionsArray = Object.values(data);
-        // console.log("transaction amt", Object.values(data));
-        //filter transactions for the selected month and year
         //import filter
         const filteredTransactions = filterTransactionsByMonthAndYear(
           data,
@@ -72,6 +69,7 @@ export default function TransactionStats({
         label: "Amount",
         data: Object.values(amountByCategory),
 
+        //to change colour during css implementation
         backgroundColor: [
           "rgba(255, 99, 132, 0.2)",
           "rgba(54, 162, 235, 0.2)",

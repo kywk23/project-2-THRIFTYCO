@@ -175,7 +175,11 @@ export default function ExpenseTrackerForm() {
 
         <label>
           <div>Category:</div>
-          <select value={categoryField} onChange={handleCategoryChange}>
+          <select
+            value={categoryField}
+            onChange={handleCategoryChange}
+            required //make this compulsory for the stats to work wells
+          >
             <option value="" disabled>
               Select category
             </option>
