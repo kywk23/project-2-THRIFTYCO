@@ -22,8 +22,8 @@ export default function TransactionStats({
     onValue(totalExpenseAmt, (snapshot) => {
       const data = snapshot.val();
       if (data) {
-        const transactionsArray = Object.values(data);
-        console.log("transaction amt", Object.values(data));
+        // const transactionsArray = Object.values(data);
+        // console.log("transaction amt", Object.values(data));
         //filter transactions for the selected month and year
         //import filter
         const filteredTransactions = filterTransactionsByMonthAndYear(
@@ -112,6 +112,7 @@ export default function TransactionStats({
   );
 }
 
+//Logic
 //import transaction details
 //import pie chart data
 //extract monthly transaction data

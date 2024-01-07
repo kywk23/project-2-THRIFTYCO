@@ -13,8 +13,8 @@ export default function ExpensesTotalAmt({ selectedMonth, selectedYear }) {
     onValue(totalExpenseAmt, (snapshot) => {
       const data = snapshot.val();
       if (data) {
-        const transactionsArray = Object.values(data);
-        console.log("transaction amt", Object.values(data));
+        // const transactionsArray = Object.values(data);
+        // console.log("transaction amt", Object.values(data));
         //filter transactions for the selected month and year
 
         const filteredTransactions = filterTransactionsByMonthAndYear(

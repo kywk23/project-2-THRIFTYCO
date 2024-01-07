@@ -1,4 +1,4 @@
-//the filter array do not provide ID, can't use in expense tracker transaction.
+//do not edit.
 
 const filterTransactionsByMonthAndYear = (
   data,
@@ -7,8 +7,13 @@ const filterTransactionsByMonthAndYear = (
 ) => {
   if (!data) return [];
 
-  const transactionsArray = Object.values(data);
+  //to import key along with data
+  const transactionsArray = Object.keys(data).map((key) => ({
+    id: key,
+    ...data[key],
+  }));
 
+  console.log("function:", Object.values(data));
   return transactionsArray.filter((transaction) => {
     const transactionMonth = new Date(transaction.selectedDate).getMonth();
     const transactionYear = new Date(transaction.selectedDate).getFullYear();

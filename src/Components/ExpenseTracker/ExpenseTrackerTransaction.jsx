@@ -3,6 +3,7 @@ import { database } from "../firebase";
 import { ref, onValue, remove } from "firebase/database";
 import ExpensesTotalAmt from "./ExpensesTotalAmt";
 import TransactionStats from "./TransactionStats";
+import { filterTransactionsByMonthAndYear } from "./utilities.js";
 
 const TransactionList = () => {
   const [transactions, setTransactions] = useState([]);
@@ -17,35 +18,20 @@ const TransactionList = () => {
       onValue(transactionsRef, (snapshot) => {
         const data = snapshot.val();
         if (data) {
-          const transactionsArray = Object.keys(data)
-            .map((key) => ({
-              id: key,
-              ...data[key],
-            }))
-            //display month transaction based on selected month
-            //extract based on RT firebase expenses selected Date
-            .filter((transaction) => {
-              const transactionMonth = new Date(
-                transaction.selectedDate
-              ).getMonth();
-              const transactionYear = new Date(
-                transaction.selectedDate
-              ).getFullYear();
-              //extract data based on selected month/year
-              return (
-                selectedMonth === transactionMonth &&
-                selectedYear === transactionYear
-              );
-            });
-          setTransactions(transactionsArray); /// set the filtered transactions to state
+          const filteredTransactions = filterTransactionsByMonthAndYear(
+            data,
+            selectedMonth,
+            selectedYear
+          );
+          setTransactions(filteredTransactions);
         } else {
           setTransactions([]);
         }
       });
     };
-
     fetchTransactions();
-  }, [selectedMonth, selectedYear]); //dependencies is the monthly
+  }, [selectedMonth, selectedYear]);
+  //dependencies is the month and year
 
   //.getMonth is 0 indexed. Jan - Dec = index 0 to 11
 
