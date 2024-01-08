@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { database } from "../firebase";
 import { onValue, ref, push } from "firebase/database";
 
-export default function BillSplitMembers({ activeGroup, setActiveGroup }) {
+export default function BillSplitMembers({ activeGroup }) {
   //Members states
   const [members, setMembers] = useState([]);
   const [memberName, setMemberName] = useState("");
@@ -42,6 +42,9 @@ export default function BillSplitMembers({ activeGroup, setActiveGroup }) {
 
   //useEffect for member addition
   useEffect(() => {
+    setMembers([]);
+    setExpenses([]);
+
     const memberListRef = ref(database, `${DB_GROUPS_KEY}/${activeGroup}/members`);
     onValue(memberListRef, (snapshot) => {
       const membersData = snapshot.val();
@@ -53,10 +56,6 @@ export default function BillSplitMembers({ activeGroup, setActiveGroup }) {
         setMembers(membersArray);
       }
     });
-  }, [activeGroup]);
-
-  //useEffect for expenses addition
-  useEffect(() => {
     const expensesRef = ref(database, `${DB_GROUPS_KEY}/${activeGroup}/expenses`);
     onValue(expensesRef, (snapshot) => {
       const expensesData = snapshot.val();
@@ -91,12 +90,17 @@ export default function BillSplitMembers({ activeGroup, setActiveGroup }) {
     setInputPaidBy("");
   };
 
-  // const expensesPerPax = () => {
-  //   const totalAmount = expenses.reduce((a, b) => a + b.Amount, 0);
-  //   const numberOfMembers = members.length;
-  //   const pricePerPax = totalAmount / numberOfMembers;
-  //   return pricePerPax;
-  // };
+  useEffect(() => {
+    const expenseAmounts = expenses.map((expense) => Number(expense.Amount));
+    //  const activeMembers
+    const numOfMembersOfActiveGroup = members.length;
+    const totalExpenseAmount = expenseAmounts.reduce((a, b) => a + b, 0);
+    const expensesPerPaxValue = totalExpenseAmount / numOfMembersOfActiveGroup;
+    setExpensesPerPax(expensesPerPaxValue);
+    console.log(`expense per pax`, expensesPerPax);
+    console.log(`ttl expense amt`, totalExpenseAmount);
+    console.log(expenses.length);
+  }, [expenses, members]);
 
   // useEffect(() => {
   //   const expenseAmounts = expenses.map((expense) => expense.Amount);
@@ -106,20 +110,13 @@ export default function BillSplitMembers({ activeGroup, setActiveGroup }) {
   //   const expensesPerPax = expenseAmounts.reduce((a, b) => a + b, 0) / numOfMembersOfActiveGroup;
   // }, [activeGroup]);
 
-  useEffect(() => {
-    const expenseAmounts = expenses.map((expense) => expense.Amount);
-    //  const activeMembers
-    const numOfMembersOfActiveGroup = members.length;
-    const totalExpenseAmount = expenseAmounts.reduce((a, b) => a + b, 0);
-    const expensesPerPaxValue = totalExpenseAmount / numOfMembersOfActiveGroup;
-    setExpensesPerPax(expensesPerPaxValue);
-    console.log(expensesPerPax);
-  }, [expenses, members]);
-
   // Find activegroup.expenses
   // For each expenses, paidby: memberName to exclude for -negative balance.
   // paidBy: all other members, to be -balance
   // render: to receive(+) and to pay(owe -)
+  // export function thisFunction (){
+
+  //
 
   return (
     <div>
