@@ -7,20 +7,24 @@ function Navbar() {
         <h1 className="logo">Money Tracker </h1>
         <ul>
           <li>
-            <NavLink to="/" activeClassName="active">
+            <NavLink to="/" activeclassname="active">
               Home
             </NavLink>
           </li>
           <li>
-            <Link to="/login">Log In/Sign Up</Link>
+            <NavLink to="/login" activeclassname="active">
+              Log In/Sign Up
+            </NavLink>
           </li>
           <li className="active">
-            <NavLink to="/expensetracker" activeClassName="active">
+            <NavLink to="/expensetracker" activeclassname="active">
               Expense Tracker
             </NavLink>
           </li>
           <li>
-            <Link to="/splitbill">Bill Splitter</Link>
+            <NavLink to="/splitbill" activeclassname="active">
+              Bill Splitter
+            </NavLink>
           </li>
           {/* Add other navigation links as needed */}
         </ul>
