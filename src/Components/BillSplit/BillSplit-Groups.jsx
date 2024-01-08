@@ -74,7 +74,7 @@ export default function BillSplitGroups() {
           ))}
         </select>
       </h2>
-      <BillSplitMembers activeGroup={activeGroup} />
+      <BillSplitMembers activeGroup={activeGroup} setActiveGroup={setActiveGroup} />
     </div>
   );
 }

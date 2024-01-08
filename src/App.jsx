@@ -12,8 +12,8 @@ function App() {
       {/* <LogInSignUp />
       <LandingPage />
       <ErrorPage /> */}
-      <ExpenseTracker />
-      {/* <BillSplitGroups /> */}
+      {/* <ExpenseTracker /> */}
+      <BillSplitGroups />
     </>
   );
 }
