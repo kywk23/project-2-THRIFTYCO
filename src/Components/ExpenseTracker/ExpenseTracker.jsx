@@ -1,7 +1,6 @@
 import React from "react";
 import ExpenseTrackerForm from "./ExpenseTrackerForm";
 import ExpenseTrackerTransaction from "./ExpenseTrackerTransaction";
-import ExpensesTotalAmt from "./ExpensesTotalAmt";
 
 export default function ExpenseTracker() {
   return (

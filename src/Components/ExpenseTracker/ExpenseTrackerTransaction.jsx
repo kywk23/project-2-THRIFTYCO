@@ -1,12 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { database } from "../firebase";
 import { ref, onValue, remove } from "firebase/database";
 import ExpensesTotalAmt from "./ExpensesTotalAmt";
+import TransactionStats from "./TransactionStats";
+import { filterTransactionsByMonthAndYear } from "./utilities.jsx";
 
 const TransactionList = () => {
   const [transactions, setTransactions] = useState([]);
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth()); // transaction header
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear()); // Default to current year
+  const [showStats, setShowStats] = useState(false);
 
   useEffect(() => {
     const fetchTransactions = () => {
@@ -15,35 +18,20 @@ const TransactionList = () => {
       onValue(transactionsRef, (snapshot) => {
         const data = snapshot.val();
         if (data) {
-          const transactionsArray = Object.keys(data)
-            .map((key) => ({
-              id: key,
-              ...data[key],
-            }))
-            //display month transaction based on selected month
-            //extract based on RT firebase expenses selected Date
-            .filter((transaction) => {
-              const transactionMonth = new Date(
-                transaction.selectedDate
-              ).getMonth();
-              const transactionYear = new Date(
-                transaction.selectedDate
-              ).getFullYear();
-              //extract data based on selected month/year
-              return (
-                selectedMonth === transactionMonth &&
-                selectedYear === transactionYear
-              );
-            });
-          setTransactions(transactionsArray); /// set the filtered transactions to state
+          const filteredTransactions = filterTransactionsByMonthAndYear(
+            data,
+            selectedMonth,
+            selectedYear
+          );
+          setTransactions(filteredTransactions);
         } else {
           setTransactions([]);
         }
       });
     };
-
     fetchTransactions();
-  }, [selectedMonth, selectedYear]); //dependencies is the monthly
+  }, [selectedMonth, selectedYear]);
+  //dependencies is the month and year
 
   //.getMonth is 0 indexed. Jan - Dec = index 0 to 11
 
@@ -82,12 +70,49 @@ const TransactionList = () => {
       });
   };
 
+  //useMemo is React's use memory.
+  //occurs when the transactions state changes,
+  const sortedTransactions = useMemo(() => {
+    return [...transactions].sort((a, b) => {
+      //latest date to earlist date
+      const dateA = new Date(a.selectedDate).getTime();
+      const dateB = new Date(b.selectedDate).getTime();
+      return dateB - dateA;
+    });
+  }, [transactions]);
+
+  console.log("sorted", sortedTransactions);
+
+  // show stats
+
+  const handleOpenShowStats = () => {
+    setShowStats(true);
+    console.log("stats open");
+  };
+
+  const handleCloseShowStats = () => {
+    setShowStats(false);
+    console.log("stats close");
+  };
+
   return (
     <div>
       <ExpensesTotalAmt
         selectedMonth={selectedMonth}
         selectedYear={selectedYear}
       />
+
+      <button className="button" onClick={handleOpenShowStats}>
+        Show Stats
+      </button>
+
+      <TransactionStats
+        showStats={showStats}
+        selectedMonth={selectedMonth}
+        selectedYear={selectedYear}
+        handleCloseShowStats={handleCloseShowStats}
+      />
+
       <h2>Monthly Transactions</h2>
       <div>
         <button onClick={handlePreviousMonth}>Previous Month</button>
@@ -107,7 +132,7 @@ const TransactionList = () => {
           month: "long",
         })} ${selectedYear}`}</h3>
         <ul>
-          {transactions.map((transaction) => (
+          {sortedTransactions.map((transaction) => (
             <li key={transaction.id}>
               <p>Date: {transaction.selectedDate}</p>
               <p>Name: {transaction.name}</p>

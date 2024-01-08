@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { ref, onValue } from "firebase/database";
 import { database } from "../firebase.jsx";
+import { filterTransactionsByMonthAndYear } from "./utilities.jsx";
 
 export default function ExpensesTotalAmt({ selectedMonth, selectedYear }) {
   const [totalAmount, setTotalAmount] = useState(0); // State for total amount
@@ -12,21 +13,13 @@ export default function ExpensesTotalAmt({ selectedMonth, selectedYear }) {
     onValue(totalExpenseAmt, (snapshot) => {
       const data = snapshot.val();
       if (data) {
-        const transactionsArray = Object.values(data);
-        console.log("transaction amt", Object.values(data));
-        //filter transactions for the selected month and year
-        const filteredTransactions = transactionsArray.filter((transaction) => {
-          const transactionMonth = new Date(
-            transaction.selectedDate
-          ).getMonth();
-          const transactionYear = new Date(
-            transaction.selectedDate
-          ).getFullYear();
-          return (
-            transactionMonth === selectedMonth &&
-            transactionYear === selectedYear
-          );
-        });
+        //import - filter transactions for the selected month and year
+
+        const filteredTransactions = filterTransactionsByMonthAndYear(
+          data,
+          selectedMonth,
+          selectedYear
+        );
 
         // Calculate total amount for the selected month and year
         const total = filteredTransactions.reduce(
