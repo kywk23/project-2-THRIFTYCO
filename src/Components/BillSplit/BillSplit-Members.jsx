@@ -51,6 +51,8 @@ export default function BillSplitMembers({ activeGroup }) {
   //useEffect for member and expense addition
   useEffect(() => {
     const memberListRef = ref(database, `${DB_GROUPS_KEY}/${activeGroup}/members`);
+    const expensesRef = ref(database, `${DB_GROUPS_KEY}/${activeGroup}/expenses`);
+
     onValue(memberListRef, (snapshot) => {
       const membersData = snapshot.val();
       if (membersData) {
@@ -61,7 +63,7 @@ export default function BillSplitMembers({ activeGroup }) {
         setMembers(membersArray);
       }
     });
-    const expensesRef = ref(database, `${DB_GROUPS_KEY}/${activeGroup}/expenses`);
+
     onValue(expensesRef, (snapshot) => {
       const expensesData = snapshot.val();
       if (expensesData) {
@@ -197,16 +199,19 @@ export default function BillSplitMembers({ activeGroup }) {
         ))}
       </ul>
       <br />
-      <h3> Balances: </h3>
-      Expenses Per Pax: ${expensesPerPax.toFixed(2)}
-      <br />
       <h2>To Give List:</h2>
       <ul>
         {toGiveArray.map((toGive, index) => (
-          <div key={index}>
-            {toGive.To} has to get{" "}
-            {toGive.From.map((from) => `$${from.Amount} from ${from.From}`).join(" and ")}
-          </div>
+          <li key={index}>
+            {toGive.To} has to receive:
+            <ul>
+              {toGive.From.map((from, fromIndex) => (
+                <li key={fromIndex}>
+                  ${from.Amount} from {from.From}
+                </li>
+              ))}
+            </ul>
+          </li>
         ))}
       </ul>
     </div>
