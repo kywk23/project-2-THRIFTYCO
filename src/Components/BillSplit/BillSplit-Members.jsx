@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { database } from "../firebase";
 import { onValue, ref, push } from "firebase/database";
 
@@ -14,7 +14,8 @@ export default function BillSplitMembers({ activeGroup }) {
   const [inputAmount, setInputAmount] = useState("");
   const [inputPaidBy, setInputPaidBy] = useState("");
   const [expensesPerPax, setExpensesPerPax] = useState(0);
-  const [balances, setBalances] = useState({});
+  const [paidByArray, setPaidByArray] = useState([]);
+  const [toGiveArray, setToGiveArray] = useState([]);
 
   // Database keys
   const DB_GROUPS_KEY = "all-groups";
@@ -40,11 +41,15 @@ export default function BillSplitMembers({ activeGroup }) {
     setMemberName("");
   };
 
-  //useEffect for member addition
   useEffect(() => {
     setMembers([]);
     setExpenses([]);
+  }, [activeGroup]);
 
+  const prevMembersRef = useRef([]);
+
+  //useEffect for member and expense addition
+  useEffect(() => {
     const memberListRef = ref(database, `${DB_GROUPS_KEY}/${activeGroup}/members`);
     onValue(memberListRef, (snapshot) => {
       const membersData = snapshot.val();
@@ -67,8 +72,32 @@ export default function BillSplitMembers({ activeGroup }) {
           PaidBy: expensesData[key].PaidBy,
         }));
         setExpenses(expensesArray);
+
+        // Calculate the paidByArray
+        const paidByArray = members.map((member) => {
+          const totalPaid = expensesArray
+            .filter((expense) => expense.PaidBy === member.memberName)
+            .reduce((sum, expense) => sum + Number(expense.Amount), 0);
+          return { [member.memberName]: totalPaid };
+        });
+        setPaidByArray(paidByArray);
+        console.log(`paid by array`, paidByArray);
+
+        // Calculate ToGive
+        const toGiveArray = expensesArray.map((expense) => {
+          const amountPerMember = expense.Amount / members.length;
+          const fromArray = members
+            .filter((member) => member.memberName !== expense.PaidBy)
+            .map((member) => ({ From: member.memberName, Amount: amountPerMember }));
+          return { To: expense.PaidBy, From: fromArray };
+        });
+
+        console.log(`toGiveArray`, toGiveArray);
+        setToGiveArray(toGiveArray);
       }
     });
+    // Save current members to ref
+    prevMembersRef.current = members;
   }, [activeGroup]);
 
   const handleAddExpense = async (e, activeGroup) => {
@@ -90,33 +119,11 @@ export default function BillSplitMembers({ activeGroup }) {
     setInputPaidBy("");
   };
 
-  useEffect(() => {
-    const expenseAmounts = expenses.map((expense) => Number(expense.Amount));
-    //  const activeMembers
-    const numOfMembersOfActiveGroup = members.length;
-    const totalExpenseAmount = expenseAmounts.reduce((a, b) => a + b, 0);
-    const expensesPerPaxValue = totalExpenseAmount / numOfMembersOfActiveGroup;
-    setExpensesPerPax(expensesPerPaxValue);
-    console.log(`expense per pax`, expensesPerPax);
-    console.log(`ttl expense amt`, totalExpenseAmount);
-    console.log(expenses.length);
-  }, [expenses, members]);
-
-  // useEffect(() => {
-  //   const expenseAmounts = expenses.map((expense) => expense.Amount);
-  //   console.log(`Expense Amounts:`, expenseAmounts);
-  //   const numOfMembersOfActiveGroup = members.length;
-  //   console.log(`Number of members of active group:`, numOfMembersOfActiveGroup);
-  //   const expensesPerPax = expenseAmounts.reduce((a, b) => a + b, 0) / numOfMembersOfActiveGroup;
-  // }, [activeGroup]);
-
   // Find activegroup.expenses
   // For each expenses, paidby: memberName to exclude for -negative balance.
   // paidBy: all other members, to be -balance
   // render: to receive(+) and to pay(owe -)
   // export function thisFunction (){
-
-  //
 
   return (
     <div>
@@ -193,6 +200,15 @@ export default function BillSplitMembers({ activeGroup }) {
       <h3> Balances: </h3>
       Expenses Per Pax: ${expensesPerPax.toFixed(2)}
       <br />
+      <h2>To Give List:</h2>
+      <ul>
+        {toGiveArray.map((toGive, index) => (
+          <div key={index}>
+            {toGive.To} has to get{" "}
+            {toGive.From.map((from) => `$${from.Amount} from ${from.From}`).join(" and ")}
+          </div>
+        ))}
+      </ul>
     </div>
   );
 }
