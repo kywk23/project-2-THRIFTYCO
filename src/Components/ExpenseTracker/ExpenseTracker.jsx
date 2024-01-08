@@ -6,7 +6,7 @@ export default function ExpenseTracker() {
   return (
     <>
       <div className="container">
-        <h2 className="title">Expense Tracker</h2>
+        <h3 className="title">Expense Tracker</h3>
         <ExpenseTrackerForm />
         <br />
         <div className="class">Transation List</div>

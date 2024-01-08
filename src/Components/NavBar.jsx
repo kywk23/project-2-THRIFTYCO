@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 function Navbar() {
   return (
@@ -7,13 +7,17 @@ function Navbar() {
         <h1 className="logo">Money Tracker </h1>
         <ul>
           <li>
-            <Link to="/">Home</Link>
+            <NavLink to="/" activeClassName="active">
+              Home
+            </NavLink>
           </li>
           <li>
             <Link to="/login">Log In/Sign Up</Link>
           </li>
-          <li>
-            <Link to="/expensetracker">Expense Tracker</Link>
+          <li className="active">
+            <NavLink to="/expensetracker" activeClassName="active">
+              Expense Tracker
+            </NavLink>
           </li>
           <li>
             <Link to="/splitbill">Bill Splitter</Link>

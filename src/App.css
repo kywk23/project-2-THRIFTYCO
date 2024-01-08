@@ -13,7 +13,7 @@
 }
 
 .navbar-bg {
-  background: rgb(183, 228, 199);
+  background: rgb(216, 243, 220);
   width: 100vw; /* Set background to full viewport width */
 }
 
@@ -36,6 +36,13 @@
 
 .navbar ul li {
   padding: 24px;
+}
+
+.navbar ul li a.active {
+  /* Your active link styles */
+  /* For example: */
+  color: blueviolet; /* Change color to highlight */
+  font-weight: bold; /* Add emphasis */
 }
 
 /* Nav Bar */
