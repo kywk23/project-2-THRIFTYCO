@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { database } from "../firebase";
 import { onValue, ref, push } from "firebase/database";
 
@@ -13,10 +13,16 @@ export default function BillSplitMembers({ activeGroup }) {
   const [expenseName, setExpenseName] = useState("");
   const [inputAmount, setInputAmount] = useState("");
   const [inputPaidBy, setInputPaidBy] = useState("");
+  // const [expensesPerPax, setExpensesPerPax] = useState(0);
+  // const [paidByArray, setPaidByArray] = useState([]);
+  // const [toGiveArray, setToGiveArray] = useState([]);
+
+  // Balances state
+  const [balances, setBalances] = useState([]);
 
   // Database keys
   const DB_GROUPS_KEY = "all-groups";
-
+  //Adding of Member to group using memberName
   const handleAddMember = async (e, activeGroup) => {
     if (activeGroup === "") {
       alert("A Group is not selected for adding members.\nPlease select a group first.");
@@ -39,7 +45,17 @@ export default function BillSplitMembers({ activeGroup }) {
   };
 
   useEffect(() => {
+    setMembers([]);
+    setExpenses([]);
+  }, [activeGroup]);
+
+  // const prevMembersRef = useRef([]);
+
+  //useEffect for member and expense addition
+  useEffect(() => {
     const memberListRef = ref(database, `${DB_GROUPS_KEY}/${activeGroup}/members`);
+    const expensesRef = ref(database, `${DB_GROUPS_KEY}/${activeGroup}/expenses`);
+
     onValue(memberListRef, (snapshot) => {
       const membersData = snapshot.val();
       if (membersData) {
@@ -50,11 +66,7 @@ export default function BillSplitMembers({ activeGroup }) {
         setMembers(membersArray);
       }
     });
-  }, [activeGroup]);
 
-  useEffect(() => {
-    console.log(expenses);
-    const expensesRef = ref(database, `${DB_GROUPS_KEY}/${activeGroup}/expenses`);
     onValue(expensesRef, (snapshot) => {
       const expensesData = snapshot.val();
       if (expensesData) {
@@ -65,21 +77,69 @@ export default function BillSplitMembers({ activeGroup }) {
           PaidBy: expensesData[key].PaidBy,
         }));
         setExpenses(expensesArray);
-        console.log(expensesData);
+
+        // // Calculate the paidByArray
+        // const paidByArray = members.map((member) => {
+        //   const totalPaid = expensesArray
+        //     .filter((expense) => expense.PaidBy === member.memberName)
+        //     .reduce((sum, expense) => sum + Number(expense.Amount), 0);
+        //   return { [member.memberName]: totalPaid };
+        // });
+        // setPaidByArray(paidByArray);
+        // console.log(`paid by array`, paidByArray);
+
+        // // Calculate ToGive
+        // const toGiveArray = expensesArray.map((expense) => {
+        //   const amountPerMember = expense.Amount / members.length;
+        //   const fromArray = members
+        //     .filter((member) => member.memberName !== expense.PaidBy)
+        //     .map((member) => ({ From: member.memberName, Amount: amountPerMember }));
+        //   return { To: expense.PaidBy, From: fromArray };
+        // });
+
+        // console.log(`toGiveArray`, toGiveArray);
+        // setToGiveArray(toGiveArray);
       }
     });
+    // Save current members to ref
+    // prevMembersRef.current = members;
   }, [activeGroup]);
+
+  const calculateBalances = () => {
+    const balanceMap = new Map();
+
+    // Initialize balances
+    members.forEach((member) => {
+      balanceMap.set(member.memberName, 0);
+    });
+
+    // Calculate balances based on expenses
+    expenses.forEach((expense) => {
+      const amountPerMember = expense.Amount / members.length;
+      balanceMap.set(expense.PaidBy, balanceMap.get(expense.PaidBy) - expense.Amount);
+
+      members.forEach((member) => {
+        if (member.memberName !== expense.PaidBy) {
+          balanceMap.set(member.memberName, balanceMap.get(member.memberName) + amountPerMember);
+        }
+      });
+    });
+    // Convert Map to array for rendering
+    const calculatedBalances = Array.from(balanceMap.entries()).map(([member, balance]) => ({
+      member,
+      balance,
+    }));
+    setBalances(calculatedBalances);
+  };
 
   const handleAddExpense = async (e, activeGroup) => {
     e.preventDefault();
-    console.log(`before try block`, activeGroup);
     const newExpense = {
       Name: expenseName,
       Amount: inputAmount,
       PaidBy: inputPaidBy,
     };
     try {
-      console.log(activeGroup);
       setExpenses([...expenses, newExpense]);
       const expenseRef = ref(database, `${DB_GROUPS_KEY}/${activeGroup}/expenses`);
       const newExpenseRef = await push(expenseRef, newExpense);
@@ -91,12 +151,11 @@ export default function BillSplitMembers({ activeGroup }) {
     setInputPaidBy("");
   };
 
-  const pricePerPax = () => {
-    const totalAmount = expenses.reduce((a, b) => a + b.Amount, 0);
-    const numberOfMembers = members.length;
-    const pricePerPax = totalAmount / numberOfMembers;
-    return pricePerPax;
-  };
+  // Find activegroup.expenses
+  // For each expenses, paidby: memberName to exclude for -negative balance.
+  // paidBy: all other members, to be -balance
+  // render: to receive(+) and to pay(owe -)
+  // export function thisFunction (){
 
   return (
     <div>
@@ -161,7 +220,7 @@ export default function BillSplitMembers({ activeGroup }) {
         </form>
       )}
       <br />
-      Group Expenses:
+      <h3>Group Expenses:</h3>
       <ul>
         {expenses.map((expense, index) => (
           <li key={expense.id}>
@@ -170,7 +229,33 @@ export default function BillSplitMembers({ activeGroup }) {
         ))}
       </ul>
       <br />
-      {/* Balances: */}
+      {/* <h2>To Give List:</h2>
+      <ul>
+        {toGiveArray.map((toGive, index) => (
+          <li key={index}>
+            {toGive.To} has to receive:
+            <ul>
+              {toGive.From.map((from, fromIndex) => (
+                <li key={fromIndex}>
+                  ${from.Amount} from {from.From}
+                </li>
+              ))}
+            </ul>
+          </li>
+        ))}
+      </ul> */}
+      <button onClick={calculateBalances}>Calculate Balances</button>
+      <br />
+      <h3>Member Balances:</h3>
+      <ul>
+        {balances.map((balance, index) => (
+          <li key={index}>
+            {balance.balance < 0
+              ? `${balance.member} should receive $${Math.abs(balance.balance)}`
+              : `${balance.member} should pay $${Math.abs(balance.balance)}`}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
