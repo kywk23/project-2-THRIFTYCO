@@ -1,18 +1,55 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: left;
+* {
+  margin: 0;
+  font-family: Helvetica, sans-serif;
+  color: rgb(34, 34, 34);
 }
 
-/* test css  */
+/* Nav Bar */
+
+.logo {
+  display: flex;
+  margin-right: auto;
+  justify-content: center;
+}
+
+.navbar-bg {
+  background: rgb(183, 228, 199);
+  width: 100vw; /* Set background to full viewport width */
+}
 
 .navbar {
+  max-width: 85vw;
   display: flex;
-  justify-content: space-around;
-  margin-bottom: 20px;
+  margin: auto;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 30px;
+  /* margin-bottom: 20px; */
 }
 
-.nav-link {
-  margin: 0 10px;
+.navbar ul {
+  display: flex;
+  justify-content: center; /* Horizontally center the flex items */
+  list-style-type: none; /* Remove bullet */
 }
+
+.navbar ul li {
+  padding: 24px;
+}
+
+/* Nav Bar */
+
+.container {
+  max-width: 85vw;
+  margin: auto;
+  box-sizing: border-box;
+  padding: 30px;
+}
+
+/* colours:
+lightest green : 244, 255, 244
+light green: 163, 177, 138
+med green: 88, 129, 87
+dark green: 58, 90, 64
+darkest green: 52, 78, 65 */

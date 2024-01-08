@@ -72,20 +72,26 @@ export default function TransactionStats({
 
         //to change colour during css implementation
         backgroundColor: [
-          "rgba(255, 99, 132, 0.2)",
-          "rgba(54, 162, 235, 0.2)",
-          "rgba(255, 206, 86, 0.2)",
-          "rgba(75, 192, 192, 0.2)",
-          "rgba(153, 102, 255, 0.2)",
-          "rgba(255, 159, 64, 0.2)",
+          "rgba(8, 28, 21, 0.6)",
+          "rgba(45, 106, 79, 0.6)",
+          "rgba(64, 145, 108, 0.6)",
+          "rgba(116, 198, 157, 0.6)",
+          "rgba(183, 228, 199, 0.6)",
+          "rgba(27, 67, 50, 0.6)",
+          "rgba(82, 183, 136, 0.6)",
+          "rgba(149, 213, 178, 0.6)",
+          "rgba(216, 243, 220, 0.6)",
         ],
         borderColor: [
-          "rgba(255, 99, 132, 1)",
-          "rgba(54, 162, 235, 1)",
-          "rgba(255, 206, 86, 1)",
-          "rgba(75, 192, 192, 1)",
-          "rgba(153, 102, 255, 1)",
-          "rgba(255, 159, 64, 1)",
+          "rgba(8, 28, 21, 0.6)",
+          "rgba(45, 106, 79, 0.6)",
+          "rgba(64, 145, 108, 0.6)",
+          "rgba(116, 198, 157, 0.6)",
+          "rgba(183, 228, 199, 0.6)",
+          "rgba(27, 67, 50, 0.6)",
+          "rgba(82, 183, 136, 0.6)",
+          "rgba(149, 213, 178, 0.6)",
+          "rgba(216, 243, 220, 0.6)",
         ],
         borderWidth: 1,
       },
@@ -97,13 +103,15 @@ export default function TransactionStats({
   return (
     <div>
       {showStats && (
-        <div>
-          <h2>Transaction Stats</h2>
-          <button className="button" onClick={handleCloseShowStats}>
-            Close
-          </button>
-          <div style={{ height: "400px", width: "400px" }}>
-            <Pie data={data} />
+        <div className="overlay">
+          <div className="popup">
+            <button className="close" onClick={handleCloseShowStats}>
+              Close
+            </button>
+            <h2>Transaction Stats</h2>
+            <div className="piechart">
+              <Pie data={data} className="piechart" />
+            </div>
           </div>
         </div>
       )}

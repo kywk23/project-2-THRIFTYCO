@@ -14,6 +14,7 @@ const filterTransactionsByMonthAndYear = (
   }));
 
   console.log("refactor function by mth/year:", Object.values(data));
+
   return transactionsArray.filter((transaction) => {
     const transactionMonth = new Date(transaction.selectedDate).getMonth();
     const transactionYear = new Date(transaction.selectedDate).getFullYear();

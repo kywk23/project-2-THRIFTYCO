@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { database } from "../firebase.jsx";
 import { ref, update } from "firebase/database";
+import "./popup.css";
 
 export default function AddEditCategories({
   showAddCategoryModal,
@@ -54,7 +55,7 @@ export default function AddEditCategories({
     .map((category, index) => (
       <li key={index}>
         {capitalizeCategory(category)}
-        <button className="delete" onClick={() => handleDelete(category)}>
+        <button className="function" onClick={() => handleDelete(category)}>
           Delete
         </button>
       </li>
@@ -64,8 +65,8 @@ export default function AddEditCategories({
   return (
     <>
       {showAddCategoryModal && (
-        <div className="modal-background">
-          <div className="modal-content">
+        <div className="overlay">
+          <div className="popup">
             <button className="close" onClick={handleCloseCategoryModal}>
               Close
             </button>
@@ -76,9 +77,11 @@ export default function AddEditCategories({
               onChange={(e) => setNewCategory(e.target.value)}
               placeholder="Enter new category"
             />
-            <button onClick={handleAddCategory}>Add</button>
+            <button className="function" onClick={handleAddCategory}>
+              Add
+            </button>
             <p> Existing Categories: </p>
-            <ul>{renderCategories}</ul>
+            <ul className="category-list">{renderCategories}</ul>
           </div>
         </div>
       )}

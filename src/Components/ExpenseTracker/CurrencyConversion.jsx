@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import "./popup.css";
 
 const API_KEY = import.meta.env.VITE_SOME_CURRENCY_API_KEY;
 const API_URL = `https://api.freecurrencyapi.com/v1/latest?apikey=${API_KEY}`;
@@ -99,8 +100,8 @@ export default function CurrencyConversion({
   return (
     <>
       {showCurrencyModal && (
-        <div className="modal-background">
-          <div className="modal-content">
+        <div className="overlay">
+          <div className="popup">
             <button className="close" onClick={handleCloseCurrencyModal}>
               Close
             </button>
@@ -140,7 +141,9 @@ export default function CurrencyConversion({
               ))}
             </select>
 
-            <button onClick={handleCalculate}>Calculate</button>
+            <button className="function" onClick={handleCalculate}>
+              Calculate
+            </button>
             <br />
             <button onClick={handleAddToExpensesForm}>Add to Form</button>
           </div>
