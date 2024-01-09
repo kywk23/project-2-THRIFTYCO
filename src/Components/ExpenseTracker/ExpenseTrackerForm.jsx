@@ -137,8 +137,8 @@ export default function ExpenseTrackerForm() {
 
   return (
     <div>
-      <h3 className="class">Add a Transaction</h3>
-
+      <br />
+      <br />
       <form onSubmit={handleSubmit}>
         <div>
           Select a date:
@@ -155,6 +155,8 @@ export default function ExpenseTrackerForm() {
             value={name}
           />
         </label>
+        <br />
+        <br />
         <label>
           <div>Amount ($):</div>
           <input
@@ -166,13 +168,11 @@ export default function ExpenseTrackerForm() {
             value={amount}
           />
         </label>
-        <br />
-
-        {/* <div>Convert Currency</div> */}
         <button type="button" onClick={handleOpenCurrencyModal}>
           Convert Currency
         </button>
-
+        <br />
+        <br />
         <label>
           <div>Category:</div>
           <select
@@ -191,12 +191,11 @@ export default function ExpenseTrackerForm() {
             ))}
           </select>
         </label>
-
-        <div>Add/Edit Category:</div>
         <button type="button" onClick={handleOpenCategoryModal}>
           Add/Edit Category
         </button>
-
+        <br />
+        <br />
         <label>
           <div>Note:</div>
           <input
@@ -205,6 +204,7 @@ export default function ExpenseTrackerForm() {
             value={note}
           />
         </label>
+        <br />
         <br />
         <button className="button">Add Transaction</button>
       </form>

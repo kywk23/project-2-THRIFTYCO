@@ -1,12 +1,14 @@
 * {
   margin: 0;
   font-family: Helvetica, sans-serif;
-  color: rgb(34, 34, 34);
+  color: black;
 }
 
 /* Nav Bar */
 
 .logo {
+  background: rgb(216, 243, 220);
+  color: black;
   display: flex;
   margin-right: auto;
   justify-content: center;
@@ -19,6 +21,7 @@
 
 .navbar {
   max-width: 85vw;
+  background: rgb(216, 243, 220);
   display: flex;
   margin: auto;
   justify-content: space-between;
@@ -29,20 +32,30 @@
 }
 
 .navbar ul {
+  background: rgb(216, 243, 220);
   display: flex;
-  justify-content: center; /* Horizontally center the flex items */
+  justify-content: center; /* Horizontally 
+  center the flex items */
   list-style-type: none; /* Remove bullet */
+  text-decoration: none;
 }
 
 .navbar ul li {
+  color: black;
+  background: rgb(216, 243, 220);
   padding: 24px;
+  text-decoration: none;
+}
+
+.navbar ul li a {
+  background: rgb(216, 243, 220);
+  text-decoration: none;
 }
 
 .navbar ul li a.active {
-  /* Your active link styles */
-  /* For example: */
-  color: blueviolet; /* Change color to highlight */
+  color: rgb(154, 55, 72); /* Change color to highlight */
   font-weight: bold; /* Add emphasis */
+  text-decoration: underline;
 }
 
 /* Nav Bar */
@@ -52,6 +65,14 @@
   margin: auto;
   box-sizing: border-box;
   padding: 30px;
+}
+
+h2 {
+  color: rgb(82, 121, 111);
+}
+
+h3 {
+  color: rgb(82, 121, 111);
 }
 
 /* colours:

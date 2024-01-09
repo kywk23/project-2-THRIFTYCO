@@ -62,6 +62,10 @@ export default function TransactionStats({
     }
   }, [selectedMonth, selectedYear, showStats]);
 
+  const options = {
+    maintainAspectRatio: false,
+  };
+
   // Prepare data for the pie chart
   const data = {
     labels: labels,
@@ -110,7 +114,7 @@ export default function TransactionStats({
             </button>
             <h2>Transaction Stats</h2>
             <div className="piechart">
-              <Pie data={data} className="piechart" />
+              <Pie data={data} className="piechart" options={options} />
             </div>
           </div>
         </div>
