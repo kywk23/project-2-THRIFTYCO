@@ -181,15 +181,15 @@ select:focus {
 
 /* UL and LI  */
 ul {
-  list-style: none; /* Remove default bullets */
+  list-style: none;
 }
 
 ul li::before {
-  content: "\2022"; /* Add content: \2022 is the CSS Code/unicode for a bullet */
+  content: "\2022";
   color: rgb(71, 229, 195);
-  display: inline-block; /* Needed to add space between the bullet and the text */
-  width: 1em; /* Also needed for space (tweak if needed) */
-  margin-left: -1em; /* Also needed for space (tweak if needed) */
+  display: inline-block;
+  width: 1em;
+  margin-left: -1em;
 }
 ul li {
   font-size: 1.2em;
@@ -197,6 +197,10 @@ ul li {
 
 p {
   font-size: 1.2em;
+}
+
+li .nav-link:hover {
+  color: white;
 }
 
 /* colours:

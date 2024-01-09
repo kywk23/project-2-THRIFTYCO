@@ -1,53 +1,53 @@
 import { useState } from "react";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth, updateProfileInfo } from "../firebase";
+// import { createUserWithEmailAndPassword } from "firebase/auth";
+// import { auth, updateProfileInfo } from "../firebase";
+import { useSignup } from "../Hooks/useSignUp.js";
+import { set } from "firebase/database";
 
 export default function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [displayName, setDisplayName] = useState("");
+  const { signup, isPending, error } = useSignup();
 
   const signUp = (e) => {
     e.preventDefault();
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        console.log("Sign up success", userCredential);
-        const currentUser = userCredential.user;
-        setEmail("");
-        setPassword("");
-        setDisplayName("");
-        return updateProfileInfo(currentUser, {
-          displayName: displayName,
-        });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    signup(email, password, displayName);
+    setEmail("");
+    setPassword("");
+    setDisplayName("");
   };
 
   return (
     <div>
       <form onSubmit={signUp}>
-        <label>Sign Up</label>
+        <h2>Sign Up</h2>
         <input
           type="email"
-          placeholder="Email"
+          placeholder="Enter your Email here.."
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
         <input
           type="password"
-          placeholder="Password"
+          placeholder="Password goes here.."
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
         <input
           type="text"
-          placeholder="Input your name here"
+          placeholder="Tell me your name.."
           value={displayName}
           onChange={(e) => setDisplayName(e.target.value)}
         />
-        <button type="submit"> Sign Up </button>
+
+        {!isPending && <button>Sign up</button>}
+        {isPending && (
+          <button disabled>
+            <i className="fa fa-spinner fa-spin"></i>Loading...
+          </button>
+        )}
+        {error && <p>{error}</p>}
       </form>
       <br />
     </div>
