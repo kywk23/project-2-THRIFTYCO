@@ -49,12 +49,16 @@
 
 /* Close button style */
 .popup .close {
-  position: absolute;
-  top: 20px;
+  position: absolute; /* Position relative to the parent popup */
+  top: 10px; /* Adjust these values to position it properly */
   right: 10px;
   background: none;
   border: none;
   cursor: pointer;
+}
+
+.popup .title {
+  margin-top: 20px;
 }
 
 .category-list {
@@ -77,4 +81,20 @@
 .piechart {
   height: 100%;
   width: 100%;
+}
+
+.WDelete {
+  font-size: 15px !important;
+  color: rgb(255, 255, 255) !important;
+  stroke: rgb(255, 255, 255);
+  stroke-opacity: 100;
+  stroke-width: 1.8;
+}
+
+.BDelete {
+  font-size: 24px !important;
+  color: rgb(0, 0, 0) !important;
+  stroke: rgb(0, 0, 0);
+  stroke-opacity: 100;
+  stroke-width: 1.8;
 }

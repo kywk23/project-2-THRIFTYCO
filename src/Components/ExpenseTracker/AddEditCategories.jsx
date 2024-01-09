@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { database } from "../firebase.jsx";
 import { ref, update } from "firebase/database";
 import "./popup.css";
+import { IconButton } from "@mui/material";
+import ClearRoundedIcon from "@mui/icons-material/ClearRounded";
+import TextField from "@mui/material/TextField";
 
 export default function AddEditCategories({
   showAddCategoryModal,
@@ -49,16 +52,28 @@ export default function AddEditCategories({
     setCategories(updatedCategories);
   };
 
+  // const useStyles = makeStyles((theme) => ({
+  //   deleteIcon: {
+  //     // Add icon styles here
+  //     color: "white",
+  //   },
+  // }));
+
   //sort category from a - z
   const renderCategories = categories
     .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
     .map((category, index) => (
-      <li key={index}>
-        {capitalizeCategory(category)}
-        <button className="function" onClick={() => handleDelete(category)}>
-          Delete
-        </button>
-      </li>
+      <div className="WDelete">
+        <li key={index}>
+          <IconButton
+            className="WDelete"
+            onClick={() => handleDelete(category)}
+          >
+            {capitalizeCategory(category)}
+            <ClearRoundedIcon className="WDelete" />
+          </IconButton>
+        </li>
+      </div>
     ));
   // };
 
@@ -67,15 +82,17 @@ export default function AddEditCategories({
       {showAddCategoryModal && (
         <div className="overlay">
           <div className="popup">
-            <button className="close" onClick={handleCloseCategoryModal}>
-              Close
-            </button>
-            <h2>Add/Edit New Category</h2>
+            <div>
+              <button className="close" onClick={handleCloseCategoryModal}>
+                <ClearRoundedIcon className="BDelete" />
+              </button>
+            </div>
+            <p className="title">Add New Category:</p>
             <input
+              placeholder="Add New Category"
               type="text"
               value={newCategory}
               onChange={(e) => setNewCategory(e.target.value)}
-              placeholder="Enter new category"
             />
             <button className="function" onClick={handleAddCategory}>
               Add

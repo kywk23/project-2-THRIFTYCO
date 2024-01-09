@@ -148,7 +148,7 @@ export default function BillSplitMembers({ activeGroup }) {
 
     // calculate the actual balance for each member
     expenses.forEach((expense) => {
-      const amount = parseFloat(expense.Amount); //conver to num
+      const amount = parseFloat(expense.Amount); //convert to numm
       balanceMap[expense.PaidBy] += amount; //add in expense to array
       console.log("amount", balanceMap[expense.PaidBy]);
     });

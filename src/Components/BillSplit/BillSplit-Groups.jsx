@@ -44,41 +44,43 @@ export default function BillSplitGroups() {
     <div>
       {/* Group Creation */}
       <div className="container">
-        <h2>Create Group</h2>
-        <label>
-          Group Name:
-          <input
-            type="text"
-            value={groupName}
-            placeholder="Group Name"
-            onChange={(e) => setGroupName(e.target.value)}
-          />
-        </label>
-        <button onClick={handleAddGroup}>Create Group</button>
-        <br />
-        {/* Created Groups */}
-        <h2>Recent Groups:</h2>
-        <ul>
-          {groupList.map((group) => (
-            <li key={group.id}>{group.name}</li>
-          ))}
-        </ul>
-        {/* Active Group Selector*/}
-        <h2>
-          Active Group:
-          <select
-            value={activeGroup}
-            onChange={(e) => setActiveGroup(e.target.value)}
-          >
-            <option value="">Select</option>
+        <div className="left-column">
+          <h2>Create Group</h2>
+          <label>
+            Group Name:
+            <input
+              type="text"
+              value={groupName}
+              placeholder="Group Name"
+              onChange={(e) => setGroupName(e.target.value)}
+            />
+          </label>
+          <button onClick={handleAddGroup}>Create Group</button>
+          <br />
+          {/* Created Groups */}
+          <h2>Recent Groups:</h2>
+          <ul>
             {groupList.map((group) => (
-              <option key={group.id} value={group.id}>
-                {group.name}
-              </option>
+              <li key={group.id}>{group.name}</li>
             ))}
-          </select>
-        </h2>
-        <BillSplitMembers activeGroup={activeGroup} />
+          </ul>
+          {/* Active Group Selector*/}
+          <h2>
+            Active Group:
+            <select
+              value={activeGroup}
+              onChange={(e) => setActiveGroup(e.target.value)}
+            >
+              <option value="">Select</option>
+              {groupList.map((group) => (
+                <option key={group.id} value={group.id}>
+                  {group.name}
+                </option>
+              ))}
+            </select>
+          </h2>
+          <BillSplitMembers activeGroup={activeGroup} />
+        </div>
       </div>
     </div>
   );

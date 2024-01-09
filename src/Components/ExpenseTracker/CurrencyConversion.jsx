@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./popup.css";
+import ClearRoundedIcon from "@mui/icons-material/ClearRounded";
+import TextField from "@mui/material/TextField";
 
 const API_KEY = import.meta.env.VITE_SOME_CURRENCY_API_KEY;
 const API_URL = `https://api.freecurrencyapi.com/v1/latest?apikey=${API_KEY}`;
@@ -103,9 +105,9 @@ export default function CurrencyConversion({
         <div className="overlay">
           <div className="popup">
             <button className="close" onClick={handleCloseCurrencyModal}>
-              Close
+              <ClearRoundedIcon className="BDelete" />
             </button>
-            <h2>Money Currency</h2>
+            <h2 className="title">Money Currency</h2>
             <p>Amount to be converted:</p>
             <input
               type="number"
