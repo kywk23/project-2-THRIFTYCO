@@ -44,42 +44,42 @@ export default function BillSplitGroups() {
     <div>
       {/* Group Creation */}
       <div className="container">
-        <h2>Create Group</h2>
-        <label>
-          Group Name:
+        <div className="left-column">
+          <h2>Create Group</h2>
           <input
             type="text"
             value={groupName}
             placeholder="Group Name"
             onChange={(e) => setGroupName(e.target.value)}
           />
-        </label>
-        <button onClick={handleAddGroup}>Create Group</button>
-        <br />
-        {/* Created Groups */}
-        <h2>Recent Groups:</h2>
-        <ul>
-          {groupList.map((group) => (
-            <li key={group.id}>{group.name}</li>
-          ))}
-        </ul>
-        {/* Active Group Selector*/}
-        <h2>
-          Active Group:
-          <select
-            value={activeGroup}
-            onChange={(e) => setActiveGroup(e.target.value)}
-          >
-            <option value="">Select</option>
+          <button onClick={handleAddGroup}>Create Group</button>
+          <br />
+          <br />
+          {/* Created Groups */}
+          <h2>Available Groups:</h2>
+          <ul>
             {groupList.map((group) => (
-              <option key={group.id} value={group.id}>
-                {group.name}
-              </option>
+              <li key={group.id}>{group.name}</li>
             ))}
-          </select>
-        </h2>
-        <BillSplitMembers activeGroup={activeGroup} />
+          </ul>
+          <br />
+          {/* Active Group Selector*/}
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <h2>Select Group: </h2>
+            <select value={activeGroup} onChange={(e) => setActiveGroup(e.target.value)}>
+              <option value="">Select</option>
+              {groupList.map((group) => (
+                <option key={group.id} value={group.id}>
+                  {group.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
       </div>
+      {/* <div className="right-column"> */}
+      <BillSplitMembers activeGroup={activeGroup} />
+      {/* </div> */}
     </div>
   );
 }

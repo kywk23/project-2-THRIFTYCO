@@ -1,27 +1,32 @@
+@import url("https://fonts.googleapis.com/css2?family=Spectral:wght@300&display=swap");
+
 * {
   margin: 0;
-  font-family: Helvetica, sans-serif;
+  font-family: "Spectral", sans-serif;
   color: black;
+  background-color: rgb(252, 250, 249);
 }
 
 /* Nav Bar */
 
 .logo {
-  background: rgb(216, 243, 220);
-  color: black;
+  background: rgb(71, 229, 195);
+  color: rgb(00, 00, 00);
   display: flex;
   margin-right: auto;
   justify-content: center;
+  font-size: 2.5em;
+  font-weight: normal;
 }
 
 .navbar-bg {
-  background: rgb(216, 243, 220);
+  background: rgb(71, 229, 195);
   width: 100vw; /* Set background to full viewport width */
 }
 
 .navbar {
   max-width: 85vw;
-  background: rgb(216, 243, 220);
+  background: rgb(71, 229, 195);
   display: flex;
   margin: auto;
   justify-content: space-between;
@@ -32,7 +37,7 @@
 }
 
 .navbar ul {
-  background: rgb(216, 243, 220);
+  background: rgb(71, 229, 195);
   display: flex;
   justify-content: center; /* Horizontally 
   center the flex items */
@@ -41,38 +46,143 @@
 }
 
 .navbar ul li {
-  color: black;
-  background: rgb(216, 243, 220);
+  background: rgb(71, 229, 195);
   padding: 24px;
   text-decoration: none;
 }
 
 .navbar ul li a {
-  background: rgb(216, 243, 220);
+  background: rgb(71, 229, 195);
   text-decoration: none;
+  color: rgb(51, 51, 51);
+  font-size: 17px;
 }
 
 .navbar ul li a.active {
-  color: rgb(154, 55, 72); /* Change color to highlight */
-  font-weight: bold; /* Add emphasis */
+  color: rgb(244, 255, 244); /* Change color to highlight */
+  font-weight: bolder; /* Add emphasis */
   text-decoration: underline;
 }
 
-/* Nav Bar */
-
+/* DO NOT EDIT */
 .container {
   max-width: 85vw;
-  margin: auto;
+  margin: 0.5% 200px 0px 8.5%;
+  display: flex;
+  overflow: hidden; /* Hide horizontal overflow */
+}
+
+.container-members {
+  max-width: 85vw;
+  margin: 0px 200px 15px 8.5%;
+  display: flex;
+  overflow: hidden; /* Hide horizontal overflow */
+}
+
+.left-column {
+  width: 50%;
+
+  box-sizing: border-box;
+  padding: 1%;
+}
+
+.right-column {
+  position: absolute;
+  top: 16%;
+  right: 1%;
+  width: 50%;
   box-sizing: border-box;
   padding: 30px;
 }
 
+h1 {
+  font-size: 3em;
+  color: rgb(52, 78, 65);
+}
+
 h2 {
-  color: rgb(82, 121, 111);
+  font-size: 2em;
+  color: rgb(52, 78, 65);
 }
 
 h3 {
-  color: rgb(82, 121, 111);
+  font-size: 1.5em;
+  color: rgb(52, 78, 65);
+}
+
+button {
+  height: 45px;
+  background-color: rgb(71, 229, 195); /* Green */
+  border: none;
+  color: rgb(00, 00, 00);
+  margin: 10px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 1em;
+}
+
+button:hover {
+  background-color: rgb(154, 255, 233);
+}
+
+label {
+  font-size: 1.5em;
+  margin: 10px;
+}
+
+input {
+  font-size: 0.7em;
+  height: 45px;
+  width: 300px;
+  margin: 10px;
+
+  border-radius: 8px;
+  padding: 8px;
+}
+
+input:focus {
+  outline: none;
+  border: 5px solid rgb(71, 229, 195);
+  border-radius: 8px;
+}
+
+input::placeholder {
+  font-size: 16px; /* Adjust placeholder font size to match input */
+  opacity: 0.7;
+}
+
+select {
+  width: 200px;
+  font-size: 1.1em;
+  margin: 10px;
+  border-radius: 8px;
+}
+
+select:focus {
+  border: 5px solid rgb(71, 229, 195);
+  border-radius: 8px;
+}
+
+ul {
+  list-style: none; /* Remove default bullets */
+}
+
+ul li::before {
+  content: "\2022"; /* Add content: \2022 is the CSS Code/unicode for a bullet */
+  color: rgb(71, 229, 195);
+  display: inline-block; /* Needed to add space between the bullet and the text */
+  width: 1em; /* Also needed for space (tweak if needed) */
+  margin-left: -1em; /* Also needed for space (tweak if needed) */
+}
+ul li {
+  font-size: 1.2em;
+}
+
+p {
+  font-size: 1.2em;
 }
 
 /* colours:
@@ -80,4 +190,6 @@ lightest green : 244, 255, 244
 light green: 163, 177, 138
 med green: 88, 129, 87
 dark green: 58, 90, 64
-darkest green: 52, 78, 65 */
+h2 and h3 = darkest green: 52, 78, 65 */
+/* Turquoise (Nav BG ): 71, 229, 195 */
+/* h1 = 3em, h2 = 2.5em, h3 = 2em */

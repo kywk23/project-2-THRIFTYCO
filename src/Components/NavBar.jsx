@@ -4,7 +4,7 @@ function Navbar() {
   return (
     <div className="navbar-bg">
       <div className="navbar">
-        <h1 className="logo">Money Tracker </h1>
+        <h1 className="logo"> THRIFTY & CO. </h1>
         <ul>
           <li>
             <NavLink to="/" activeclassname="active">

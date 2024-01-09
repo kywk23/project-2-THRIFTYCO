@@ -6,6 +6,7 @@ import LandingPage from "./Components/LandingPage.jsx";
 import ErrorPage from "./Components/ErrorPage.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Navbar from "./Components/NavBar.jsx";
+import { Helmet } from "react-helmet";
 
 function App() {
   const router = createBrowserRouter([
@@ -50,6 +51,14 @@ function App() {
   ]);
   return (
     <>
+      <Helmet>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Spectral:wght@300&display=swap"
+          rel="stylesheet"
+        />
+      </Helmet>
       <div>
         <RouterProvider router={router} />
         <br />

@@ -10,6 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.3",
+    "@emotion/styled": "^11.11.0",
+    "@fontsource/roboto": "^5.0.8",
+    "@mui/icons-material": "^5.15.3",
+    "@mui/material": "^5.15.3",
     "axios": "^1.6.2",
     "chart.js": "^4.4.1",
     "firebase": "^10.7.1",
@@ -17,6 +22,7 @@
     "react-chartjs-2": "^5.2.0",
     "react-date-picker": "^10.6.0",
     "react-dom": "^18.2.0",
+    "react-helmet": "^6.1.0",
     "react-router-dom": "^6.21.1"
   },
   "devDependencies": {
