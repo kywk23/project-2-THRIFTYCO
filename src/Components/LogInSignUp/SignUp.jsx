@@ -1,15 +1,11 @@
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-} from "firebase/auth";
 import { useState } from "react";
-import { auth, updateProfileInfo } from "./firebase.jsx";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth, updateProfileInfo } from "../firebase";
 
-export default function LogInSignUp() {
+export default function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [displayName, setDisplayName] = useState("");
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const signUp = (e) => {
     e.preventDefault();
@@ -24,20 +20,8 @@ export default function LogInSignUp() {
           displayName: displayName,
         });
       })
-
       .catch((error) => {
         console.log(error);
-      });
-  };
-
-  const logIn = () => {
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        console.log(userCredential);
-        setIsLoggedIn(true);
-      })
-      .catch((err) => {
-        console.log(err);
       });
   };
 
@@ -66,7 +50,6 @@ export default function LogInSignUp() {
         <button type="submit"> Sign Up </button>
       </form>
       <br />
-      <button onClick={logIn}>Log In</button>
     </div>
   );
 }

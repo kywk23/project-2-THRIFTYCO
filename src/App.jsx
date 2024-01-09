@@ -1,7 +1,8 @@
 import "./App.css";
 import BillSplitGroups from "./Components/BillSplit/BillSplit-Groups.jsx";
 import ExpenseTracker from "./Components/ExpenseTracker/ExpenseTracker.jsx";
-import LogInSignUp from "./Components/LogInSignUp.jsx";
+import SignUp from "./Components/LogInSignUp/SignUp.jsx";
+import LogIn from "./Components/LogInSignUp/LogIn.jsx";
 import LandingPage from "./Components/LandingPage.jsx";
 import ErrorPage from "./Components/ErrorPage.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -21,11 +22,11 @@ function App() {
       ),
     },
     {
-      path: "/login",
+      path: "/LogIn",
       element: (
         <div>
           <Navbar />
-          <LogInSignUp />
+          <LogIn />
           <br />
         </div>
       ),

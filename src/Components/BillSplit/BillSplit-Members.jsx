@@ -13,9 +13,6 @@ export default function BillSplitMembers({ activeGroup }) {
   const [expenseName, setExpenseName] = useState("");
   const [inputAmount, setInputAmount] = useState("");
   const [inputPaidBy, setInputPaidBy] = useState("");
-  // const [expensesPerPax, setExpensesPerPax] = useState(0);
-  // const [paidByArray, setPaidByArray] = useState([]);
-  // const [toGiveArray, setToGiveArray] = useState([]);
 
   const [totalAmountPaid, setTotalAmountPaid] = useState(0);
   const [averageAmountPaid, setAverageAmountPaid] = useState(0);
@@ -83,28 +80,6 @@ export default function BillSplitMembers({ activeGroup }) {
         }));
         setExpenses(expensesArray);
         console.log("expensesArray", expensesArray);
-
-        // // Calculate the paidByArray
-        // const paidByArray = members.map((member) => {
-        //   const totalPaid = expensesArray
-        //     .filter((expense) => expense.PaidBy === member.memberName)
-        //     .reduce((sum, expense) => sum + Number(expense.Amount), 0);
-        //   return { [member.memberName]: totalPaid };
-        // });
-        // setPaidByArray(paidByArray);
-        // console.log(`paid by array`, paidByArray);
-
-        // // Calculate ToGive
-        // const toGiveArray = expensesArray.map((expense) => {
-        //   const amountPerMember = expense.Amount / members.length;
-        //   const fromArray = members
-        //     .filter((member) => member.memberName !== expense.PaidBy)
-        //     .map((member) => ({ From: member.memberName, Amount: amountPerMember }));
-        //   return { To: expense.PaidBy, From: fromArray };
-        // });
-
-        // console.log(`toGiveArray`, toGiveArray);
-        // setToGiveArray(toGiveArray);
       }
     });
   }, [activeGroup]);
@@ -158,9 +133,6 @@ export default function BillSplitMembers({ activeGroup }) {
 
     console.log("balance map", balanceMap);
     console.log("exp", expenses);
-
-    // receivers has a positive balance =
-    // payers has a negative balance, to pay back to receiver
 
     const payers = [];
     const receivers = [];
@@ -228,12 +200,6 @@ export default function BillSplitMembers({ activeGroup }) {
     setInputAmount("");
     setInputPaidBy("");
   };
-
-  // Find activegroup.expenses
-  // For each expenses, paidby: memberName to exclude for -negative balance.
-  // paidBy: all other members, to be -balance
-  // render: to receive(+) and to pay(owe -)
-  // export function thisFunction (){
 
   return (
     <div>
@@ -320,7 +286,7 @@ export default function BillSplitMembers({ activeGroup }) {
               <button onClick={calculateBalances}>Split the Bill!</button>
               <br />
               <br />
-              <h3>Debt Recovery:</h3>
+              <h3>Transaction Summary:</h3>
               <ul>
                 {balances.map((balance, index) => (
                   <li key={index}>
@@ -331,6 +297,7 @@ export default function BillSplitMembers({ activeGroup }) {
                 ))}
               </ul>
               <br />
+              <h3>Debt Recovery:</h3>
               <ul>
                 {paymentTransactions.map((transaction, index) => (
                   <li key={index}>
