@@ -112,12 +112,12 @@ h1 {
 }
 
 h2 {
-  font-size: 2em;
+  font-size: 1.7em;
   color: rgb(52, 78, 65);
 }
 
 h3 {
-  font-size: 1.5em;
+  font-size: 1.2em;
   color: rgb(52, 78, 65);
 }
 
@@ -192,11 +192,11 @@ ul li::before {
   margin-left: -1em;
 }
 ul li {
-  font-size: 1.2em;
+  font-size: 1.1em;
 }
 
 p {
-  font-size: 1.2em;
+  font-size: 1.1em;
 }
 
 li .nav-link:hover {
