@@ -13,9 +13,7 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_SOME_APP_ID,
 };
 
-// To decide on naming of variables again below:
 const firebaseApp = initializeApp(firebaseConfig);
 export const database = getDatabase(firebaseApp);
 export const storage = getStorage(firebaseApp);
 export const auth = getAuth(firebaseApp);
-export const updateProfileInfo = (user, profile) => updateProfile(user, profile);
