@@ -344,7 +344,6 @@ export default function BillSplitMembers({ activeGroup }) {
       </ul> */}
           <p>Total Expenses of the Group: ${totalAmountPaid}</p>
           <p>Average Amount Each Person Has to Pay: ${averageAmountPaid}</p>
-          )}
           <br />
           <button onClick={calculateBalances}>Calculate Balances</button>
           <br />
