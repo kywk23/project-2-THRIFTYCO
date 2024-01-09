@@ -137,8 +137,8 @@ export default function ExpenseTrackerForm() {
 
   return (
     <div>
-      <div className="class">Add a Transaction</div>
-      <br />
+      <h3 className="class">Add a Transaction</h3>
+
       <form onSubmit={handleSubmit}>
         <div>
           Select a date:

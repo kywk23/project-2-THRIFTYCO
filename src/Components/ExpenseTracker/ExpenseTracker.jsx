@@ -5,12 +5,13 @@ import ExpenseTrackerTransaction from "./ExpenseTrackerTransaction";
 export default function ExpenseTracker() {
   return (
     <>
-      <h1 className="class">Expense Tracker</h1>
-      <div className="class">Transaction Form</div>
-      <ExpenseTrackerForm />
-      <br />
-      <div className="class">Transation List</div>
-      <ExpenseTrackerTransaction />
+      <div className="container">
+        <h3 className="title">Expense Tracker</h3>
+        <ExpenseTrackerForm />
+        <br />
+        <div className="class">Transation List</div>
+        <ExpenseTrackerTransaction />
+      </div>
     </>
   );
 }

@@ -50,8 +50,10 @@ function App() {
   ]);
   return (
     <>
-      <h1>Money Tracker </h1>
-      <RouterProvider router={router} />
+      <div>
+        <RouterProvider router={router} />
+        <br />
+      </div>
     </>
   );
 }

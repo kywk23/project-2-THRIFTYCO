@@ -1,0 +1,80 @@
+/* Styles for the overlay */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(24, 24, 24, 0.7); /* 50% transparent black */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999; /* Ensure the overlay is on top */
+}
+
+/* Styles for the popup */
+.popup {
+  background-color: white;
+  width: 35%;
+  padding: 30px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  position: relative; /* Optional: Adding a box shadow for depth */
+}
+
+/* text */
+/* header 2 */
+.popup h2 {
+  margin-top: 5;
+}
+
+.popup p {
+  margin-bottom: 20px;
+}
+
+/* selection box */
+.popup input[type="number"],
+.popup input[type="text"],
+.popup select {
+  width: 70%;
+  padding: 8px;
+  margin-bottom: 10px;
+}
+
+/* button */
+.popup .function {
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+/* Close button style */
+.popup .close {
+  position: absolute;
+  top: 20px;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.category-list {
+  list-style: none; /* Remove default list styles */
+  padding: 0;
+  margin: 0;
+  display: flex; /* Make the list items display horizontally */
+  flex-wrap: wrap; /* Allow items to wrap to the next line */
+}
+
+.category-list li {
+  color: rgb(244, 255, 244);
+  margin-right: 10px;
+  margin-bottom: 10px;
+  background-color: rgb(52, 78, 65);
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.piechart {
+  height: 100%;
+  width: 100%;
+}
