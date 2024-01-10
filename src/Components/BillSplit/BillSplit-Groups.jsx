@@ -4,14 +4,19 @@ import { database } from "../firebase";
 import BillSplitMembers from "./BillSplit-Members";
 import { useAuthContext } from "../Hooks/useAuthContext";
 
+//Auth - check user's UID
+import useAuthUID from "../Hooks/useAuthUID";
+
 export default function BillSplitGroups() {
   // Group Creation states
   const [groupName, setGroupName] = useState("");
   const [activeGroup, setActiveGroup] = useState("");
   const [groupList, setGroupList] = useState([]);
 
+  const userUID = useAuthUID();
+
   // Database keys
-  const DB_GROUPS_KEY = "all-groups";
+  const DB_GROUPS_KEY = `all-groups/${userUID}/`;
   //Hooks
   const { user } = useAuthContext();
 
@@ -41,7 +46,7 @@ export default function BillSplitGroups() {
         setGroupList(groupsArray);
       }
     });
-  }, [activeGroup]);
+  }, [activeGroup, DB_GROUPS_KEY]);
 
   return (
     <div>
@@ -53,6 +58,7 @@ export default function BillSplitGroups() {
               <h2>Create Group</h2>
               <input
                 type="text"
+                style={{ fontSize: "1em" }}
                 value={groupName}
                 placeholder="Group Name"
                 onChange={(e) => setGroupName(e.target.value)}
@@ -73,7 +79,10 @@ export default function BillSplitGroups() {
           {/* Active Group Selector*/}
           <div style={{ display: "flex", alignItems: "center" }}>
             <h2>Select Group: </h2>
-            <select value={activeGroup} onChange={(e) => setActiveGroup(e.target.value)}>
+            <select
+              value={activeGroup}
+              onChange={(e) => setActiveGroup(e.target.value)}
+            >
               <option value="">Select</option>
               {groupList.map((group) => (
                 <option key={group.id} value={group.id}>

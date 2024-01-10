@@ -3,6 +3,9 @@ import { database } from "../firebase";
 import { onValue, ref, push } from "firebase/database";
 import { useAuthContext } from "../Hooks/useAuthContext";
 
+//Auth - check user's UID
+import useAuthUID from "../Hooks/useAuthUID";
+
 export default function BillSplitMembers({ activeGroup }) {
   //Members states
   const [members, setMembers] = useState([]);
@@ -23,12 +26,16 @@ export default function BillSplitMembers({ activeGroup }) {
   // Hooks
   const { user } = useAuthContext();
 
+  const userUID = useAuthUID();
+
   // Database keys
-  const DB_GROUPS_KEY = "all-groups";
+  const DB_GROUPS_KEY = `all-groups/${userUID}/`;
   //Adding of Member to group using memberName
   const handleAddMember = async (e, activeGroup) => {
     if (activeGroup === "") {
-      alert("A Group is not selected for adding members.\nPlease select a group first.");
+      alert(
+        "A Group is not selected for adding members.\nPlease select a group first."
+      );
       return;
     } else if (memberName === "") {
       alert("Please enter a member name.");
@@ -36,7 +43,10 @@ export default function BillSplitMembers({ activeGroup }) {
     }
     e.preventDefault();
     try {
-      const memberRef = ref(database, `${DB_GROUPS_KEY}/${activeGroup}/members`);
+      const memberRef = ref(
+        database,
+        `${DB_GROUPS_KEY}/${activeGroup}/members`
+      );
       const newMemberRef = await push(memberRef, {
         memberName: memberName,
       });
@@ -54,8 +64,14 @@ export default function BillSplitMembers({ activeGroup }) {
 
   //useEffect for member and expense addition
   useEffect(() => {
-    const memberListRef = ref(database, `${DB_GROUPS_KEY}/${activeGroup}/members`);
-    const expensesRef = ref(database, `${DB_GROUPS_KEY}/${activeGroup}/expenses`);
+    const memberListRef = ref(
+      database,
+      `${DB_GROUPS_KEY}/${activeGroup}/members`
+    );
+    const expensesRef = ref(
+      database,
+      `${DB_GROUPS_KEY}/${activeGroup}/expenses`
+    );
 
     onValue(memberListRef, (snapshot) => {
       const membersData = snapshot.val();
@@ -81,7 +97,7 @@ export default function BillSplitMembers({ activeGroup }) {
         console.log("expensesArray", expensesArray);
       }
     });
-  }, [activeGroup]);
+  }, [activeGroup, DB_GROUPS_KEY]);
 
   useEffect(() => {
     let totalPaid = 0;
@@ -121,10 +137,12 @@ export default function BillSplitMembers({ activeGroup }) {
     });
 
     // set the updated balances
-    const calculatedBalances = Object.entries(balanceMap).map(([member, balance]) => ({
-      member,
-      balance,
-    }));
+    const calculatedBalances = Object.entries(balanceMap).map(
+      ([member, balance]) => ({
+        member,
+        balance,
+      })
+    );
 
     setBalances(calculatedBalances);
 
@@ -186,7 +204,10 @@ export default function BillSplitMembers({ activeGroup }) {
     };
     try {
       setExpenses([...expenses, newExpense]);
-      const expenseRef = ref(database, `${DB_GROUPS_KEY}/${activeGroup}/expenses`);
+      const expenseRef = ref(
+        database,
+        `${DB_GROUPS_KEY}/${activeGroup}/expenses`
+      );
       const newExpenseRef = await push(expenseRef, newExpense);
     } catch (error) {
       console.error(error.message);
@@ -205,11 +226,15 @@ export default function BillSplitMembers({ activeGroup }) {
             <>
               <input
                 type="text"
+                style={{ fontSize: "1em" }}
                 value={memberName}
                 placeholder="Enter Member's Name"
                 onChange={(e) => setMemberName(e.target.value)}
               />
-              <button type="button" onClick={(e) => handleAddMember(e, activeGroup)}>
+              <button
+                type="button"
+                onClick={(e) => handleAddMember(e, activeGroup)}
+              >
                 Add Member
               </button>
             </>
@@ -250,7 +275,10 @@ export default function BillSplitMembers({ activeGroup }) {
               </label>
               <br />
               <label>Paid By: </label>
-              <select value={inputPaidBy} onChange={(e) => setInputPaidBy(e.target.value)}>
+              <select
+                value={inputPaidBy}
+                onChange={(e) => setInputPaidBy(e.target.value)}
+              >
                 <option value="">Select</option>
                 {members.map((member) => (
                   <option key={member.id} value={member.memberName}>
@@ -280,7 +308,10 @@ export default function BillSplitMembers({ activeGroup }) {
               <br />
               <p>Total Expenses of the Group: ${totalAmountPaid.toFixed(2)}</p>
               <br />
-              <p>Average Amount Each Person Has to Pay: ${averageAmountPaid.toFixed(2)}</p>
+              <p>
+                Average Amount Each Person Has to Pay: $
+                {averageAmountPaid.toFixed(2)}
+              </p>
               <br />
               <button onClick={calculateBalances}>Split the Bill!</button>
               <br />
@@ -290,10 +321,12 @@ export default function BillSplitMembers({ activeGroup }) {
                 {balances.map((balance, index) => (
                   <li key={index}>
                     {balance.balance < 0
-                      ? `${balance.member} should pay $${Math.abs(balance.balance).toFixed(2)}.`
-                      : `${balance.member} should receive $${Math.abs(balance.balance).toFixed(
-                          2
-                        )}.`}
+                      ? `${balance.member} should pay $${Math.abs(
+                          balance.balance
+                        ).toFixed(2)}.`
+                      : `${balance.member} should receive $${Math.abs(
+                          balance.balance
+                        ).toFixed(2)}.`}
                   </li>
                 ))}
               </ul>
@@ -302,7 +335,8 @@ export default function BillSplitMembers({ activeGroup }) {
               <ul>
                 {paymentTransactions.map((transaction, index) => (
                   <li key={index}>
-                    {transaction.from} should pay {transaction.to} ${transaction.amount.toFixed(2)}.
+                    {transaction.from} should pay {transaction.to} $
+                    {transaction.amount.toFixed(2)}.
                   </li>
                 ))}
               </ul>
