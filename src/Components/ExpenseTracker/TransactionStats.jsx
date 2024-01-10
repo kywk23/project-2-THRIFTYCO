@@ -5,6 +5,7 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
 ChartJS.register(ArcElement, Tooltip, Legend);
 import { filterTransactionsByMonthAndYear } from "./utilities.jsx";
+import ClearRoundedIcon from "@mui/icons-material/ClearRounded";
 
 export default function TransactionStats({
   selectedMonth,
@@ -112,9 +113,14 @@ export default function TransactionStats({
         <div className="overlay">
           <div className="popup">
             <button className="close" onClick={handleCloseShowStats}>
-              Close
+              <ClearRoundedIcon className="BDelete" />
             </button>
-            <h2>Transaction Stats</h2>
+            <p className="title">
+              {new Date(selectedYear, selectedMonth).toLocaleString("default", {
+                month: "long",
+              })}{" "}
+              {selectedYear}
+            </p>
             <div className="piechart">
               <Pie data={data} className="piechart" options={options} />
             </div>
