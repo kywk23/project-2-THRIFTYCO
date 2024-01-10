@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { database } from "../firebase.jsx";
 import { ref, push, update, onValue } from "firebase/database";
 import "./style.css";
+import { auth } from "../firebase.jsx";
 
 // npm package: date picker
 import DatePicker from "react-date-picker";
@@ -21,6 +22,24 @@ export default function ExpenseTrackerForm() {
   const [categories, setCategories] = useState([]);
   const [showAddCategoryModal, setShowAddCategoryModal] = useState(false); //pop up for category
   const [showCurrencyModal, setShowCurrencyModal] = useState(false); // pop up for conversion of currency
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        // User is signed in.
+        setUser(user);
+        // Here you can access the user's UID with user.uid
+        console.log("User ID:", user.uid);
+      } else {
+        // No user is signed in.
+        setUser(null);
+      }
+    });
+
+    // Clean up the subscription to avoid memory leaks
+    return () => unsubscribe();
+  }, []);
 
   const handleDateChange = (date) => {
     setSelectedDate(date.toDateString());
@@ -117,6 +136,7 @@ export default function ExpenseTrackerForm() {
       amount,
       categoryField,
       note,
+      userUUID: user.uid,
     })
       .then(() => {
         console.log("Transaction", {
@@ -125,6 +145,7 @@ export default function ExpenseTrackerForm() {
           amount,
           categoryField,
           note,
+          userUUID: user.uid,
         });
         setName("");
         setAmount("");
