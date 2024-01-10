@@ -4,6 +4,19 @@ import { ref, onValue, remove } from "firebase/database";
 import ExpensesTotalAmt from "./ExpensesTotalAmt";
 import TransactionStats from "./TransactionStats";
 import { filterTransactionsByMonthAndYear } from "./utilities.jsx";
+import "./style.css";
+import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
+import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+import ClearRoundedIcon from "@mui/icons-material/ClearRounded";
+
+//MUI Table Imports
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
 
 const TransactionList = () => {
   const [transactions, setTransactions] = useState([]);
@@ -96,6 +109,7 @@ const TransactionList = () => {
 
   return (
     <div>
+<<<<<<< HEAD
       <ExpensesTotalAmt selectedMonth={selectedMonth} selectedYear={selectedYear} />
 
       <button className="button" onClick={handleOpenShowStats}>
@@ -133,6 +147,104 @@ const TransactionList = () => {
             </li>
           ))}
         </ul>
+=======
+      <div className="container">
+        <div className="right-column">
+          <ExpensesTotalAmt
+            selectedMonth={selectedMonth}
+            selectedYear={selectedYear}
+          />
+
+          <TransactionStats
+            showStats={showStats}
+            selectedMonth={selectedMonth}
+            selectedYear={selectedYear}
+            handleCloseShowStats={handleCloseShowStats}
+          />
+          <div className="container-stats">
+            <h2>Monthly Transactions</h2>
+            <button className="button" onClick={handleOpenShowStats}>
+              Show Stats
+            </button>
+          </div>
+          <div className="container-monthly">
+            <div>
+              <button className="monthly-button" onClick={handlePreviousMonth}>
+                {" "}
+                <KeyboardArrowLeftIcon className="WDelete" />
+              </button>
+              <h3>{`${new Date(selectedYear, selectedMonth).toLocaleString(
+                "default",
+                {
+                  month: "long",
+                }
+              )} ${selectedYear}`}</h3>
+              <button className="monthly-button" onClick={handleNextMonth}>
+                {" "}
+                <KeyboardArrowRightIcon className="WDelete" />
+              </button>
+            </div>
+          </div>
+          <div>
+            <h2>{`Transactions for ${new Date(
+              selectedYear,
+              selectedMonth
+            ).toLocaleString("default", {
+              month: "long",
+            })} ${selectedYear}`}</h2>
+            <TableContainer component={Paper}>
+              <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>DATE</TableCell>
+                    <TableCell align="right">TRANSACTION NAME</TableCell>
+                    <TableCell align="right">AMOUNT ($)</TableCell>
+                    <TableCell align="right">CATERGORY</TableCell>
+                    <TableCell align="right">NOTE</TableCell>
+                    <TableCell align="right">DELETE</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {sortedTransactions.map((transaction) => (
+                    <TableRow
+                      key={transaction.id}
+                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                    >
+                      <TableCell
+                        className="table-font"
+                        component="th"
+                        scope="row"
+                      >
+                        {transaction.selectedDate}
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        {transaction.name}
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        {transaction.amount}
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        {transaction.categoryField}
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        {transaction.note}
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        <button
+                          className="monthly-button"
+                          onClick={() => handleDelete(transaction.id)}
+                        >
+                          <ClearRoundedIcon className="WDelete" />
+                        </button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </div>
+        </div>
+>>>>>>> main
       </div>
     </div>
   );

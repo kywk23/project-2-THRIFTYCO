@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { database } from "../firebase.jsx";
-import { ref, update } from "firebase/database";
+import { ref, update, remove } from "firebase/database";
 import "./popup.css";
+import { IconButton } from "@mui/material";
+import ClearRoundedIcon from "@mui/icons-material/ClearRounded";
+import TextField from "@mui/material/TextField";
 
 export default function AddEditCategories({
   showAddCategoryModal,
@@ -42,45 +45,64 @@ export default function AddEditCategories({
     } else console.log("category is empty or already exists.");
   };
 
+  //allow user to delete categories
   const handleDelete = (categoryToDelete) => {
-    const updatedCategories = categories.filter(
-      (category) => category !== categoryToDelete
+    const categoryRefToDelete = ref(
+      database,
+      "expenses-categories/" + categoryToDelete
     );
-    setCategories(updatedCategories);
+    remove(categoryRefToDelete)
+      .then(() => {
+        const updatedCategories = categories.filter(
+          (category) => category !== categoryToDelete
+        );
+        setCategories(updatedCategories);
+        console.log("Category deleted");
+      })
+      .catch((error) => {
+        console.error("Delete category error", error);
+      });
   };
 
   //sort category from a - z
   const renderCategories = categories
     .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
     .map((category, index) => (
-      <li key={index}>
-        {capitalizeCategory(category)}
-        <button className="function" onClick={() => handleDelete(category)}>
-          Delete
-        </button>
-      </li>
+      <ul className="category-list">
+        <li className="category-list" key={index}>
+          <button
+            className="categorybutton"
+            onClick={() => handleDelete(category)}
+          >
+            {capitalizeCategory(category)}
+            <ClearRoundedIcon className="WDelete" />
+          </button>
+        </li>
+      </ul>
     ));
-  // };
 
   return (
     <>
       {showAddCategoryModal && (
         <div className="overlay">
           <div className="popup">
-            <button className="close" onClick={handleCloseCategoryModal}>
-              Close
-            </button>
-            <h2>Add/Edit New Category</h2>
+            <div>
+              <button className="close" onClick={handleCloseCategoryModal}>
+                <ClearRoundedIcon className="BDelete" />
+              </button>
+            </div>
+            <p className="title">Add New Category:</p>
             <input
+              className="input"
+              placeholder="Add New Category"
               type="text"
               value={newCategory}
               onChange={(e) => setNewCategory(e.target.value)}
-              placeholder="Enter new category"
             />
             <button className="function" onClick={handleAddCategory}>
               Add
             </button>
-            <p> Existing Categories: </p>
+            <p className="subtitle"> Existing Categories: </p>
             <ul className="category-list">{renderCategories}</ul>
           </div>
         </div>
