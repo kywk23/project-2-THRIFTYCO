@@ -17,16 +17,20 @@ function Navbar() {
                 Home
               </NavLink>
             </li>
-            <li className="active">
-              <NavLink to="/expensetracker" activeclassname="active" className="nav-link">
-                Expense Tracker
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/splitbill" activeclassname="active" className="nav-link">
-                Bill Splitter
-              </NavLink>
-            </li>
+            {user && (
+              <>
+                <li className="active">
+                  <NavLink to="/expensetracker" activeclassname="active" className="nav-link">
+                    Expense Tracker
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to="/splitbill" activeclassname="active" className="nav-link">
+                    Bill Splitter
+                  </NavLink>
+                </li>
+              </>
+            )}
 
             {!user && (
               <>
