@@ -1,6 +1,4 @@
 import { useState } from "react";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebase";
 import { useLogIn } from "../Hooks/useLogIn.js";
 
 export default function LogIn() {

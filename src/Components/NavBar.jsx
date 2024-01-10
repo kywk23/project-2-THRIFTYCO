@@ -22,11 +22,15 @@ function Navbar() {
   useEffect(() => {
     if (user) {
       setIsLoggedIn(true);
+      //only show first log in as expense tracker
+      //once the first log in is true, user can view any pages
+      //trigger state to true once user logged in the first time
       if (!firstLogin) {
         setFirstLogin(true);
-        nav("/expensetracker"); // Redirect to Expense Tracker only on initial login
+        nav("/expensetracker"); // nav to Expense Tracker only on initial login
       }
     } else {
+      //user not logged in
       setIsLoggedIn(false);
       setFirstLogin(false);
     }
