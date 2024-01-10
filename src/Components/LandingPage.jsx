@@ -1,4 +1,5 @@
 export default function LandingPage() {
+  //landing
   return (
     <div className="container-landingpage">
       <div className="title-and-details">
