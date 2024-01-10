@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./popup.css";
 import ClearRoundedIcon from "@mui/icons-material/ClearRounded";
-import TextField from "@mui/material/TextField";
 
 const API_KEY = import.meta.env.VITE_SOME_CURRENCY_API_KEY;
 const API_URL = `https://api.freecurrencyapi.com/v1/latest?apikey=${API_KEY}`;

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { database } from "../firebase.jsx";
 import { ref, push, update, onValue } from "firebase/database";
 import "./style.css";
-import { auth } from "../firebase.jsx";
 import useAuthUID from "../Hooks/useAuthUID";
 
 // npm package: date picker
