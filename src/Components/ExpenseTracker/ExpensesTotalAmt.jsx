@@ -3,8 +3,13 @@ import { ref, onValue } from "firebase/database";
 import { database } from "../firebase.jsx";
 import { filterTransactionsByMonthAndYear } from "./utilities.jsx";
 
+//Auth - check user's UID
+import useAuthUID from "../Hooks/useAuthUID";
+
 export default function ExpensesTotalAmt({ selectedMonth, selectedYear }) {
   const [totalAmount, setTotalAmount] = useState(0); // State for total amount
+
+  const userUID = useAuthUID();
 
   useEffect(() => {
     const totalExpenseAmt = ref(database, "personal-expenses");
@@ -18,7 +23,8 @@ export default function ExpensesTotalAmt({ selectedMonth, selectedYear }) {
         const filteredTransactions = filterTransactionsByMonthAndYear(
           data,
           selectedMonth,
-          selectedYear
+          selectedYear,
+          userUID
         );
 
         // Calculate total amount for the selected month and year
@@ -33,7 +39,7 @@ export default function ExpensesTotalAmt({ selectedMonth, selectedYear }) {
         setTotalAmount(0); //when selected month's array is empty
       }
     });
-  }, [selectedMonth, selectedYear]);
+  }, [selectedMonth, selectedYear, userUID]);
 
   return (
     <div>

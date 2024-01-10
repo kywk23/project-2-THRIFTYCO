@@ -3,6 +3,7 @@ import { database } from "../firebase.jsx";
 import { ref, push, update, onValue } from "firebase/database";
 import "./style.css";
 import { auth } from "../firebase.jsx";
+import useAuthUID from "../Hooks/useAuthUID";
 
 // npm package: date picker
 import DatePicker from "react-date-picker";
@@ -22,23 +23,9 @@ export default function ExpenseTrackerForm() {
   const [categories, setCategories] = useState([]);
   const [showAddCategoryModal, setShowAddCategoryModal] = useState(false); //pop up for category
   const [showCurrencyModal, setShowCurrencyModal] = useState(false); // pop up for conversion of currency
-  const [user, setUser] = useState(null);
 
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      if (user) {
-        // User is signed in.
-        setUser(user);
-        console.log("User ID:", user.uid);
-      } else {
-        // no user
-        setUser(null);
-      }
-    });
-
-    // avoid memory leaks
-    return () => unsubscribe();
-  }, []);
+  const userUID = useAuthUID();
+  console.log("can see userID?", userUID);
 
   const handleDateChange = (date) => {
     setSelectedDate(date.toDateString());
@@ -81,7 +68,7 @@ export default function ExpenseTrackerForm() {
 
   useEffect(() => {
     const defaultCategories = ["Food", "Transportation"]; //default categories for all users
-    const categoriesRef = ref(database, "expenses-categories");
+    const categoriesRef = ref(database, `expenses-categories/${userUID}/`);
     //fetch categories from Firebase when the component mounts
     onValue(categoriesRef, (snapshot) => {
       const categoriesData = snapshot.val();
@@ -89,21 +76,27 @@ export default function ExpenseTrackerForm() {
       if (!categoriesData) {
         //add default categories in Firebase if they don't exist
         update(categoriesRef, {
-          ...defaultCategories.reduce((acc, category) => ({ ...acc, [category]: true }), {}),
+          ...defaultCategories.reduce(
+            (acc, category) => ({ ...acc, [category]: true }),
+            {}
+          ),
         })
           .then(() => {
             console.log("Default categories added to Firebase");
             setCategories(defaultCategories); // Update state with default categories
           })
           .catch((error) => {
-            console.error("Error adding default categories to Firebase:", error);
+            console.error(
+              "Error adding default categories to Firebase:",
+              error
+            );
           });
       } else {
         const categoriesList = Object.keys(categoriesData);
         setCategories(categoriesList); // update state with fetched categorie, including new categories
       }
     });
-  }, []);
+  }, [userUID]);
 
   // capitalize the first letter of a category
   const capitalizeCategory = (category) => {
@@ -122,14 +115,14 @@ export default function ExpenseTrackerForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const expenseRef = ref(database, "personal-expenses");
+    const expenseRef = ref(database, `personal-expenses`);
     push(expenseRef, {
       selectedDate,
       name,
       amount,
       categoryField,
       note,
-      userUUID: user.uid,
+      userUUID: userUID,
     })
       .then(() => {
         console.log("Transaction", {
@@ -138,7 +131,7 @@ export default function ExpenseTrackerForm() {
           amount,
           categoryField,
           note,
-          userUUID: user.uid,
+          userUUID: userUID,
         });
         setName("");
         setAmount("");
@@ -161,13 +154,22 @@ export default function ExpenseTrackerForm() {
               <label>
                 <div>Select a date:</div>
                 <br />
-                <DatePicker className="calendar" onChange={handleDateChange} value={selectedDate} />
+                <DatePicker
+                  className="calendar"
+                  onChange={handleDateChange}
+                  value={selectedDate}
+                />
               </label>
             </div>
             <br />
             <label>
               <div>Transaction Name:</div>
-              <input type="text" required onChange={(e) => setName(e.target.value)} value={name} />
+              <input
+                type="text"
+                required
+                onChange={(e) => setName(e.target.value)}
+                value={name}
+              />
             </label>
             <br />
             <br />
@@ -213,7 +215,11 @@ export default function ExpenseTrackerForm() {
             <br />
             <label>
               <div>Note:</div>
-              <input type="text" onChange={(e) => setNote(e.target.value)} value={note} />
+              <input
+                type="text"
+                onChange={(e) => setNote(e.target.value)}
+                value={note}
+              />
             </label>
             <br />
             <br />
