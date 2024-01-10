@@ -23,6 +23,8 @@ const TransactionList = () => {
             selectedMonth,
             selectedYear
           );
+          //reference a auth.UID
+          //filter filteredTrans based on UID and it contains UID, let filter push thru
           setTransactions(filteredTransactions);
         } else {
           setTransactions([]);
@@ -32,7 +34,6 @@ const TransactionList = () => {
     fetchTransactions();
   }, [selectedMonth, selectedYear]);
   //dependencies is the month and year
-
   //.getMonth is 0 indexed. Jan - Dec = index 0 to 11
 
   const handlePreviousMonth = () => {
@@ -59,9 +60,7 @@ const TransactionList = () => {
     const transactionRef = ref(database, `personal-expenses/${id}`);
     remove(transactionRef)
       .then(() => {
-        const updatedTransactions = transactions.filter(
-          (transaction) => transaction.id !== id
-        );
+        const updatedTransactions = transactions.filter((transaction) => transaction.id !== id);
         setTransactions(updatedTransactions);
         console.log("Transaction deleted");
       })
@@ -97,10 +96,7 @@ const TransactionList = () => {
 
   return (
     <div>
-      <ExpensesTotalAmt
-        selectedMonth={selectedMonth}
-        selectedYear={selectedYear}
-      />
+      <ExpensesTotalAmt selectedMonth={selectedMonth} selectedYear={selectedYear} />
 
       <button className="button" onClick={handleOpenShowStats}>
         Show Stats
@@ -116,19 +112,13 @@ const TransactionList = () => {
       <h2>Monthly Transactions</h2>
       <div>
         <button onClick={handlePreviousMonth}>Previous Month</button>
-        <h3>{`${new Date(selectedYear, selectedMonth).toLocaleString(
-          "default",
-          {
-            month: "long",
-          }
-        )} ${selectedYear}`}</h3>
+        <h3>{`${new Date(selectedYear, selectedMonth).toLocaleString("default", {
+          month: "long",
+        })} ${selectedYear}`}</h3>
         <button onClick={handleNextMonth}>Next Month</button>
       </div>
       <div>
-        <h3>{`Transactions for ${new Date(
-          selectedYear,
-          selectedMonth
-        ).toLocaleString("default", {
+        <h3>{`Transactions for ${new Date(selectedYear, selectedMonth).toLocaleString("default", {
           month: "long",
         })} ${selectedYear}`}</h3>
         <ul>
@@ -139,9 +129,7 @@ const TransactionList = () => {
               <p>Amount ($): {transaction.amount}</p>
               <p>Category: {transaction.categoryField}</p>
               <p>Note: {transaction.note}</p>
-              <button onClick={() => handleDelete(transaction.id)}>
-                Delete
-              </button>
+              <button onClick={() => handleDelete(transaction.id)}>Delete</button>
             </li>
           ))}
         </ul>

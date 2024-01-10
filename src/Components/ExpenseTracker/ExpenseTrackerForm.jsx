@@ -70,20 +70,14 @@ export default function ExpenseTrackerForm() {
       if (!categoriesData) {
         //add default categories in Firebase if they don't exist
         update(categoriesRef, {
-          ...defaultCategories.reduce(
-            (acc, category) => ({ ...acc, [category]: true }),
-            {}
-          ),
+          ...defaultCategories.reduce((acc, category) => ({ ...acc, [category]: true }), {}),
         })
           .then(() => {
             console.log("Default categories added to Firebase");
             setCategories(defaultCategories); // Update state with default categories
           })
           .catch((error) => {
-            console.error(
-              "Error adding default categories to Firebase:",
-              error
-            );
+            console.error("Error adding default categories to Firebase:", error);
           });
       } else {
         const categoriesList = Object.keys(categoriesData);
@@ -116,6 +110,8 @@ export default function ExpenseTrackerForm() {
       amount,
       categoryField,
       note,
+      //Add UID property to track ${activerUser}
+      // auth.UID (?)
     })
       .then(() => {
         console.log("Transaction", {
@@ -148,12 +144,7 @@ export default function ExpenseTrackerForm() {
         <br />
         <label>
           <div>Transaction Name:</div>
-          <input
-            type="text"
-            required
-            onChange={(e) => setName(e.target.value)}
-            value={name}
-          />
+          <input type="text" required onChange={(e) => setName(e.target.value)} value={name} />
         </label>
         <br />
         <br />
@@ -198,11 +189,7 @@ export default function ExpenseTrackerForm() {
         <br />
         <label>
           <div>Note:</div>
-          <input
-            type="text"
-            onChange={(e) => setNote(e.target.value)}
-            value={note}
-          />
+          <input type="text" onChange={(e) => setNote(e.target.value)} value={note} />
         </label>
         <br />
         <br />
