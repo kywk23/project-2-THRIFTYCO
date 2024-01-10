@@ -15,6 +15,8 @@ export const useLogIn = () => {
 
     try {
       const res = await signInWithEmailAndPassword(auth, email, password);
+      // const currentLoggedInUser = res.user.uid;
+      // console.log(currentLoggedInUser);
 
       dispatch({ type: "LOGIN", payload: res.user });
 

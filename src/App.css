@@ -79,6 +79,13 @@
   overflow: hidden; /* Hide horizontal overflow */
 }
 
+.container-signup {
+  margin: 5% 200px 0px 8.5%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .left-column {
   width: 50%;
   box-sizing: border-box;

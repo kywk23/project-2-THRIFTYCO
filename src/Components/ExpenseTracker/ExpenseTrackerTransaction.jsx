@@ -36,6 +36,8 @@ const TransactionList = () => {
             selectedMonth,
             selectedYear
           );
+          //reference a auth.UID
+          //filter filteredTrans based on UID and it contains UID, let filter push thru
           setTransactions(filteredTransactions);
         } else {
           setTransactions([]);
@@ -45,7 +47,6 @@ const TransactionList = () => {
     fetchTransactions();
   }, [selectedMonth, selectedYear]);
   //dependencies is the month and year
-
   //.getMonth is 0 indexed. Jan - Dec = index 0 to 11
 
   const handlePreviousMonth = () => {
@@ -72,9 +73,7 @@ const TransactionList = () => {
     const transactionRef = ref(database, `personal-expenses/${id}`);
     remove(transactionRef)
       .then(() => {
-        const updatedTransactions = transactions.filter(
-          (transaction) => transaction.id !== id
-        );
+        const updatedTransactions = transactions.filter((transaction) => transaction.id !== id);
         setTransactions(updatedTransactions);
         console.log("Transaction deleted");
       })
@@ -112,10 +111,7 @@ const TransactionList = () => {
     <div>
       <div className="container">
         <div className="right-column">
-          <ExpensesTotalAmt
-            selectedMonth={selectedMonth}
-            selectedYear={selectedYear}
-          />
+          <ExpensesTotalAmt selectedMonth={selectedMonth} selectedYear={selectedYear} />
 
           <TransactionStats
             showStats={showStats}
@@ -135,12 +131,9 @@ const TransactionList = () => {
                 {" "}
                 <KeyboardArrowLeftIcon className="WDelete" />
               </button>
-              <h3>{`${new Date(selectedYear, selectedMonth).toLocaleString(
-                "default",
-                {
-                  month: "long",
-                }
-              )} ${selectedYear}`}</h3>
+              <h3>{`${new Date(selectedYear, selectedMonth).toLocaleString("default", {
+                month: "long",
+              })} ${selectedYear}`}</h3>
               <button className="monthly-button" onClick={handleNextMonth}>
                 {" "}
                 <KeyboardArrowRightIcon className="WDelete" />
@@ -148,12 +141,12 @@ const TransactionList = () => {
             </div>
           </div>
           <div>
-            <h2>{`Transactions for ${new Date(
-              selectedYear,
-              selectedMonth
-            ).toLocaleString("default", {
-              month: "long",
-            })} ${selectedYear}`}</h2>
+            <h2>{`Transactions for ${new Date(selectedYear, selectedMonth).toLocaleString(
+              "default",
+              {
+                month: "long",
+              }
+            )} ${selectedYear}`}</h2>
             <TableContainer component={Paper}>
               <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
@@ -172,11 +165,7 @@ const TransactionList = () => {
                       key={transaction.id}
                       sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                     >
-                      <TableCell
-                        className="table-font"
-                        component="th"
-                        scope="row"
-                      >
+                      <TableCell className="table-font" component="th" scope="row">
                         {transaction.selectedDate}
                       </TableCell>
                       <TableCell component="th" scope="row">
