@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { database } from "../firebase.jsx";
-import { ref, update } from "firebase/database";
+import { ref, update, remove } from "firebase/database";
 import "./popup.css";
 import { IconButton } from "@mui/material";
 import ClearRoundedIcon from "@mui/icons-material/ClearRounded";
@@ -45,37 +45,41 @@ export default function AddEditCategories({
     } else console.log("category is empty or already exists.");
   };
 
+  //allow user to delete categories
   const handleDelete = (categoryToDelete) => {
-    const updatedCategories = categories.filter(
-      (category) => category !== categoryToDelete
+    const categoryRefToDelete = ref(
+      database,
+      "expenses-categories/" + categoryToDelete
     );
-    setCategories(updatedCategories);
+    remove(categoryRefToDelete)
+      .then(() => {
+        const updatedCategories = categories.filter(
+          (category) => category !== categoryToDelete
+        );
+        setCategories(updatedCategories);
+        console.log("Category deleted");
+      })
+      .catch((error) => {
+        console.error("Delete category error", error);
+      });
   };
-
-  // const useStyles = makeStyles((theme) => ({
-  //   deleteIcon: {
-  //     // Add icon styles here
-  //     color: "white",
-  //   },
-  // }));
 
   //sort category from a - z
   const renderCategories = categories
     .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
     .map((category, index) => (
-      <div className="WDelete">
-        <li key={index}>
-          <IconButton
-            className="WDelete"
+      <ul className="category-list">
+        <li className="category-list" key={index}>
+          <button
+            className="categorybutton"
             onClick={() => handleDelete(category)}
           >
             {capitalizeCategory(category)}
             <ClearRoundedIcon className="WDelete" />
-          </IconButton>
+          </button>
         </li>
-      </div>
+      </ul>
     ));
-  // };
 
   return (
     <>
@@ -89,6 +93,7 @@ export default function AddEditCategories({
             </div>
             <p className="title">Add New Category:</p>
             <input
+              className="input"
               placeholder="Add New Category"
               type="text"
               value={newCategory}
@@ -97,7 +102,7 @@ export default function AddEditCategories({
             <button className="function" onClick={handleAddCategory}>
               Add
             </button>
-            <p> Existing Categories: </p>
+            <p className="subtitle"> Existing Categories: </p>
             <ul className="category-list">{renderCategories}</ul>
           </div>
         </div>

@@ -4,6 +4,10 @@ import { ref, onValue, remove } from "firebase/database";
 import ExpensesTotalAmt from "./ExpensesTotalAmt";
 import TransactionStats from "./TransactionStats";
 import { filterTransactionsByMonthAndYear } from "./utilities.jsx";
+import "./style.css";
+import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
+import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+import { IconButton } from "@mui/material";
 
 const TransactionList = () => {
   const [transactions, setTransactions] = useState([]);
@@ -97,54 +101,66 @@ const TransactionList = () => {
 
   return (
     <div>
-      <ExpensesTotalAmt
-        selectedMonth={selectedMonth}
-        selectedYear={selectedYear}
-      />
+      <div className="container">
+        <div className="right-column">
+          <ExpensesTotalAmt
+            selectedMonth={selectedMonth}
+            selectedYear={selectedYear}
+          />
 
-      <button className="button" onClick={handleOpenShowStats}>
-        Show Stats
-      </button>
-
-      <TransactionStats
-        showStats={showStats}
-        selectedMonth={selectedMonth}
-        selectedYear={selectedYear}
-        handleCloseShowStats={handleCloseShowStats}
-      />
-
-      <h2>Monthly Transactions</h2>
-      <div>
-        <button onClick={handlePreviousMonth}>Previous Month</button>
-        <h3>{`${new Date(selectedYear, selectedMonth).toLocaleString(
-          "default",
-          {
-            month: "long",
-          }
-        )} ${selectedYear}`}</h3>
-        <button onClick={handleNextMonth}>Next Month</button>
-      </div>
-      <div>
-        <h3>{`Transactions for ${new Date(
-          selectedYear,
-          selectedMonth
-        ).toLocaleString("default", {
-          month: "long",
-        })} ${selectedYear}`}</h3>
-        <ul>
-          {sortedTransactions.map((transaction) => (
-            <li key={transaction.id}>
-              <p>Date: {transaction.selectedDate}</p>
-              <p>Name: {transaction.name}</p>
-              <p>Amount ($): {transaction.amount}</p>
-              <p>Category: {transaction.categoryField}</p>
-              <p>Note: {transaction.note}</p>
-              <button onClick={() => handleDelete(transaction.id)}>
-                Delete
+          <TransactionStats
+            showStats={showStats}
+            selectedMonth={selectedMonth}
+            selectedYear={selectedYear}
+            handleCloseShowStats={handleCloseShowStats}
+          />
+          <div className="container-stats">
+            <h2>Monthly Transactions</h2>
+            <button className="button" onClick={handleOpenShowStats}>
+              Show Stats
+            </button>
+          </div>
+          <div className="container-monthly">
+            <div>
+              <button className="monthly-button" onClick={handlePreviousMonth}>
+                {" "}
+                <KeyboardArrowLeftIcon />
               </button>
-            </li>
-          ))}
-        </ul>
+              <h3>{`${new Date(selectedYear, selectedMonth).toLocaleString(
+                "default",
+                {
+                  month: "long",
+                }
+              )} ${selectedYear}`}</h3>
+              <button className="monthly-button" onClick={handleNextMonth}>
+                {" "}
+                <KeyboardArrowRightIcon />
+              </button>
+            </div>
+          </div>
+          <div>
+            <h2>{`Transactions for ${new Date(
+              selectedYear,
+              selectedMonth
+            ).toLocaleString("default", {
+              month: "long",
+            })} ${selectedYear}`}</h2>
+            <ul>
+              {sortedTransactions.map((transaction) => (
+                <li key={transaction.id}>
+                  <p>Date: {transaction.selectedDate}</p>
+                  <p>Name: {transaction.name}</p>
+                  <p>Amount ($): {transaction.amount}</p>
+                  <p>Category: {transaction.categoryField}</p>
+                  <p>Note: {transaction.note}</p>
+                  <button onClick={() => handleDelete(transaction.id)}>
+                    Delete
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   );

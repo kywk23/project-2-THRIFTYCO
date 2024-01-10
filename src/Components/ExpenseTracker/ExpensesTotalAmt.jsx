@@ -37,13 +37,13 @@ export default function ExpensesTotalAmt({ selectedMonth, selectedYear }) {
 
   return (
     <div>
-      <p>
+      <h2>
         Total Expenses for{" "}
         {new Date(selectedYear, selectedMonth).toLocaleString("default", {
           month: "long",
         })}{" "}
         {selectedYear}: ${totalAmount.toFixed(2)}
-      </p>
+      </h2>
     </div>
   );
 }

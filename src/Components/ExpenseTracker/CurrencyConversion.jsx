@@ -107,9 +107,10 @@ export default function CurrencyConversion({
             <button className="close" onClick={handleCloseCurrencyModal}>
               <ClearRoundedIcon className="BDelete" />
             </button>
-            <h2 className="title">Money Currency</h2>
-            <p>Amount to be converted:</p>
+
+            <p className="title">Amount to be converted:</p>
             <input
+              className="amtinput"
               type="number"
               step="0.01"
               min="0.01"
@@ -117,7 +118,7 @@ export default function CurrencyConversion({
               onChange={(e) => handleAmountToBeConverted(e)}
               value={toConvertAmount}
             />
-            <p>From</p>
+            <p className="subtitle">From</p>
             <select
               value={fromCurrency}
               onChange={(e) => setFromCurrency(e.target.value)}
@@ -129,9 +130,10 @@ export default function CurrencyConversion({
                 </option>
               ))}
             </select>
-            <p>To Converted Amount: {convertedAmount}</p>
-            <p>To</p>
+
+            <p className="subtitle">To</p>
             <select
+              className="selection"
               value={toCurrency}
               onChange={(e) => setToCurrency(e.target.value)}
             >
@@ -142,12 +144,18 @@ export default function CurrencyConversion({
                 </option>
               ))}
             </select>
+            <div>
+              <button className="function" onClick={handleCalculate}>
+                Calculate
+              </button>
+            </div>
 
-            <button className="function" onClick={handleCalculate}>
-              Calculate
-            </button>
             <br />
-            <button onClick={handleAddToExpensesForm}>Add to Form</button>
+            <h3>Converted Amount: {convertedAmount}</h3>
+            <br />
+            <div className="addformbtn">
+              <button onClick={handleAddToExpensesForm}>Add to Form</button>
+            </div>
           </div>
         </div>
       )}
