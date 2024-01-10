@@ -84,9 +84,7 @@ export default function BillSplitGroups() {
           </div>
         </div>
       </div>
-      {/* <div className="right-column"> */}
       <BillSplitMembers activeGroup={activeGroup} />
-      {/* </div> */}
     </div>
   );
 }

@@ -17,16 +17,20 @@ function Navbar() {
                 Home
               </NavLink>
             </li>
-            <li className="active">
-              <NavLink to="/expensetracker" activeclassname="active" className="nav-link">
-                Expense Tracker
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/splitbill" activeclassname="active" className="nav-link">
-                Bill Splitter
-              </NavLink>
-            </li>
+            {user && (
+              <>
+                <li className="active">
+                  <NavLink to="/expensetracker" activeclassname="active" className="nav-link">
+                    Expense Tracker
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to="/splitbill" activeclassname="active" className="nav-link">
+                    Bill Splitter
+                  </NavLink>
+                </li>
+              </>
+            )}
 
             {!user && (
               <>
@@ -42,18 +46,14 @@ function Navbar() {
                 </li>
               </>
             )}
-
             {user && (
               <>
-                <li style={{ color: "rgb(150, 100, 300)", textDecoration: "underline white" }}>
-                  Hello, {user.displayName}{" "}
-                </li>
+                <li style={{ color: "rgb(255, 95, 31)" }}>Hello, {user.displayName} </li>
                 <button style={{ backgroundColor: "white" }} onClick={logout}>
                   Log Out
                 </button>
               </>
             )}
-
             {/* Add other navigation links as needed */}
           </ul>
         )}

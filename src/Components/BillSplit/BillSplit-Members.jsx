@@ -52,8 +52,6 @@ export default function BillSplitMembers({ activeGroup }) {
     setExpenses([]);
   }, [activeGroup]);
 
-  // const prevMembersRef = useRef([]);
-
   //useEffect for member and expense addition
   useEffect(() => {
     const memberListRef = ref(database, `${DB_GROUPS_KEY}/${activeGroup}/members`);
@@ -85,8 +83,6 @@ export default function BillSplitMembers({ activeGroup }) {
     });
   }, [activeGroup]);
 
-  //calculate total amount paid, and average of each member
-
   useEffect(() => {
     let totalPaid = 0;
 
@@ -108,7 +104,7 @@ export default function BillSplitMembers({ activeGroup }) {
 
     // Initialize balances
     members.forEach((member) => {
-      balanceMap[member.memberName] = 0; // Start with a balance of zero for each member
+      balanceMap[member.memberName] = 0;
     });
 
     // calculate the actual balance for each member
@@ -174,8 +170,6 @@ export default function BillSplitMembers({ activeGroup }) {
 
         payer.balance -= transferAmount;
         receiver.balance -= transferAmount;
-
-        //loop to ensure payer pays receiver till amount = 0.
       }
     });
     setPaymentTransactions(transactions);
@@ -284,9 +278,9 @@ export default function BillSplitMembers({ activeGroup }) {
               </ul>
               <br />
               <br />
-              <p>Total Expenses of the Group: ${totalAmountPaid}</p>
+              <p>Total Expenses of the Group: ${totalAmountPaid.toFixed(2)}</p>
               <br />
-              <p>Average Amount Each Person Has to Pay: ${averageAmountPaid}</p>
+              <p>Average Amount Each Person Has to Pay: ${averageAmountPaid.toFixed(2)}</p>
               <br />
               <button onClick={calculateBalances}>Split the Bill!</button>
               <br />
@@ -296,8 +290,10 @@ export default function BillSplitMembers({ activeGroup }) {
                 {balances.map((balance, index) => (
                   <li key={index}>
                     {balance.balance < 0
-                      ? `${balance.member} should pay $${Math.abs(balance.balance)}.`
-                      : `${balance.member} should receive $${Math.abs(balance.balance)}.`}
+                      ? `${balance.member} should pay $${Math.abs(balance.balance).toFixed(2)}.`
+                      : `${balance.member} should receive $${Math.abs(balance.balance).toFixed(
+                          2
+                        )}.`}
                   </li>
                 ))}
               </ul>
@@ -306,7 +302,7 @@ export default function BillSplitMembers({ activeGroup }) {
               <ul>
                 {paymentTransactions.map((transaction, index) => (
                   <li key={index}>
-                    {transaction.from} should pay {transaction.to} ${transaction.amount}.
+                    {transaction.from} should pay {transaction.to} ${transaction.amount.toFixed(2)}.
                   </li>
                 ))}
               </ul>
