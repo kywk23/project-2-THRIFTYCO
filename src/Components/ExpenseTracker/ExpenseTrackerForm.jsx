@@ -134,98 +134,22 @@ export default function ExpenseTrackerForm() {
 
   return (
     <div>
-<<<<<<< HEAD
-      <br />
-      <br />
-      <form onSubmit={handleSubmit}>
-        <div>
-          Select a date:
-          <br />
-          <DatePicker onChange={handleDateChange} value={selectedDate} />
-        </div>
-        <br />
-        <label>
-          <div>Transaction Name:</div>
-          <input type="text" required onChange={(e) => setName(e.target.value)} value={name} />
-        </label>
-        <br />
-        <br />
-        <label>
-          <div>Amount ($):</div>
-          <input
-            type="number"
-            step="0.01"
-            min="0.01"
-            required
-            onChange={(e) => handleAmountChange(e)}
-            value={amount}
-          />
-        </label>
-        <button type="button" onClick={handleOpenCurrencyModal}>
-          Convert Currency
-        </button>
-        <br />
-        <br />
-        <label>
-          <div>Category:</div>
-          <select
-            value={categoryField}
-            onChange={handleCategoryChange}
-            required //make this compulsory for the stats to work wells
-          >
-            <option value="" disabled>
-              Select category
-            </option>
-            {categories.map((category, index) => (
-              <option key={index} value={category}>
-                {/* standardise appearance of text on frontend*/}
-                {capitalizeCategory(category)}
-              </option>
-            ))}
-          </select>
-        </label>
-        <button type="button" onClick={handleOpenCategoryModal}>
-          Add/Edit Category
-        </button>
-        <br />
-        <br />
-        <label>
-          <div>Note:</div>
-          <input type="text" onChange={(e) => setNote(e.target.value)} value={note} />
-        </label>
-        <br />
-        <br />
-        <button className="button">Add Transaction</button>
-      </form>
-      <br />
-      {/* must be outside the form to stop the trigger of "required" */}
-=======
       <div className="container">
         <div className="left-column">
           <h2>Log Your Expense</h2>
->>>>>>> main
 
           <form onSubmit={handleSubmit}>
             <div>
               <label>
                 <div>Select a date:</div>
                 <br />
-                <DatePicker
-                  className="calendar"
-                  Change={handleDateChange}
-                  value={selectedDate}
-                />
+                <DatePicker className="calendar" Change={handleDateChange} value={selectedDate} />
               </label>
             </div>
             <br />
             <label>
               <div>Transaction Name:</div>
-              <input
-                type="text"
-                required
-                onChange={(e) => setName(e.target.value)}
-                value={name}
-              />
+              <input type="text" required onChange={(e) => setName(e.target.value)} value={name} />
             </label>
             <br />
             <br />
@@ -271,11 +195,7 @@ export default function ExpenseTrackerForm() {
             <br />
             <label>
               <div>Note:</div>
-              <input
-                type="text"
-                onChange={(e) => setNote(e.target.value)}
-                value={note}
-              />
+              <input type="text" onChange={(e) => setNote(e.target.value)} value={note} />
             </label>
             <br />
             <br />

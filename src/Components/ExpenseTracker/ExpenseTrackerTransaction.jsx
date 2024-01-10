@@ -109,51 +109,9 @@ const TransactionList = () => {
 
   return (
     <div>
-<<<<<<< HEAD
-      <ExpensesTotalAmt selectedMonth={selectedMonth} selectedYear={selectedYear} />
-
-      <button className="button" onClick={handleOpenShowStats}>
-        Show Stats
-      </button>
-
-      <TransactionStats
-        showStats={showStats}
-        selectedMonth={selectedMonth}
-        selectedYear={selectedYear}
-        handleCloseShowStats={handleCloseShowStats}
-      />
-
-      <h2>Monthly Transactions</h2>
-      <div>
-        <button onClick={handlePreviousMonth}>Previous Month</button>
-        <h3>{`${new Date(selectedYear, selectedMonth).toLocaleString("default", {
-          month: "long",
-        })} ${selectedYear}`}</h3>
-        <button onClick={handleNextMonth}>Next Month</button>
-      </div>
-      <div>
-        <h3>{`Transactions for ${new Date(selectedYear, selectedMonth).toLocaleString("default", {
-          month: "long",
-        })} ${selectedYear}`}</h3>
-        <ul>
-          {sortedTransactions.map((transaction) => (
-            <li key={transaction.id}>
-              <p>Date: {transaction.selectedDate}</p>
-              <p>Name: {transaction.name}</p>
-              <p>Amount ($): {transaction.amount}</p>
-              <p>Category: {transaction.categoryField}</p>
-              <p>Note: {transaction.note}</p>
-              <button onClick={() => handleDelete(transaction.id)}>Delete</button>
-            </li>
-          ))}
-        </ul>
-=======
       <div className="container">
         <div className="right-column">
-          <ExpensesTotalAmt
-            selectedMonth={selectedMonth}
-            selectedYear={selectedYear}
-          />
+          <ExpensesTotalAmt selectedMonth={selectedMonth} selectedYear={selectedYear} />
 
           <TransactionStats
             showStats={showStats}
@@ -173,12 +131,9 @@ const TransactionList = () => {
                 {" "}
                 <KeyboardArrowLeftIcon className="WDelete" />
               </button>
-              <h3>{`${new Date(selectedYear, selectedMonth).toLocaleString(
-                "default",
-                {
-                  month: "long",
-                }
-              )} ${selectedYear}`}</h3>
+              <h3>{`${new Date(selectedYear, selectedMonth).toLocaleString("default", {
+                month: "long",
+              })} ${selectedYear}`}</h3>
               <button className="monthly-button" onClick={handleNextMonth}>
                 {" "}
                 <KeyboardArrowRightIcon className="WDelete" />
@@ -186,12 +141,12 @@ const TransactionList = () => {
             </div>
           </div>
           <div>
-            <h2>{`Transactions for ${new Date(
-              selectedYear,
-              selectedMonth
-            ).toLocaleString("default", {
-              month: "long",
-            })} ${selectedYear}`}</h2>
+            <h2>{`Transactions for ${new Date(selectedYear, selectedMonth).toLocaleString(
+              "default",
+              {
+                month: "long",
+              }
+            )} ${selectedYear}`}</h2>
             <TableContainer component={Paper}>
               <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
@@ -210,11 +165,7 @@ const TransactionList = () => {
                       key={transaction.id}
                       sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                     >
-                      <TableCell
-                        className="table-font"
-                        component="th"
-                        scope="row"
-                      >
+                      <TableCell className="table-font" component="th" scope="row">
                         {transaction.selectedDate}
                       </TableCell>
                       <TableCell component="th" scope="row">
@@ -244,7 +195,6 @@ const TransactionList = () => {
             </TableContainer>
           </div>
         </div>
->>>>>>> main
       </div>
     </div>
   );
