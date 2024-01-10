@@ -45,15 +45,12 @@ function Navbar() {
 
             {user && (
               <>
-                <li style={{ color: "rgb(150, 100, 300)", textDecoration: "underline white" }}>
-                  Hello, {user.displayName}{" "}
-                </li>
+                <li style={{ color: "rgb(255, 95, 31)" }}>Hello, {user.displayName} </li>
                 <button style={{ backgroundColor: "white" }} onClick={logout}>
                   Log Out
                 </button>
               </>
             )}
-
             {/* Add other navigation links as needed */}
           </ul>
         )}

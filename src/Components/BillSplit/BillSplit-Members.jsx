@@ -284,9 +284,9 @@ export default function BillSplitMembers({ activeGroup }) {
               </ul>
               <br />
               <br />
-              <p>Total Expenses of the Group: ${totalAmountPaid}</p>
+              <p>Total Expenses of the Group: ${totalAmountPaid.toFixed(2)}</p>
               <br />
-              <p>Average Amount Each Person Has to Pay: ${averageAmountPaid}</p>
+              <p>Average Amount Each Person Has to Pay: ${averageAmountPaid.toFixed(2)}</p>
               <br />
               <button onClick={calculateBalances}>Split the Bill!</button>
               <br />
@@ -296,8 +296,10 @@ export default function BillSplitMembers({ activeGroup }) {
                 {balances.map((balance, index) => (
                   <li key={index}>
                     {balance.balance < 0
-                      ? `${balance.member} should pay $${Math.abs(balance.balance)}.`
-                      : `${balance.member} should receive $${Math.abs(balance.balance)}.`}
+                      ? `${balance.member} should pay $${Math.abs(balance.balance).toFixed(2)}.`
+                      : `${balance.member} should receive $${Math.abs(balance.balance).toFixed(
+                          2
+                        )}.`}
                   </li>
                 ))}
               </ul>
@@ -306,7 +308,7 @@ export default function BillSplitMembers({ activeGroup }) {
               <ul>
                 {paymentTransactions.map((transaction, index) => (
                   <li key={index}>
-                    {transaction.from} should pay {transaction.to} ${transaction.amount}.
+                    {transaction.from} should pay {transaction.to} ${transaction.amount.toFixed(2)}.
                   </li>
                 ))}
               </ul>
