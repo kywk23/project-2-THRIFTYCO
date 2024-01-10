@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { onValue, ref, push } from "firebase/database";
 import { database } from "../firebase";
 import BillSplitMembers from "./BillSplit-Members";
+import { useAuthContext } from "../Hooks/useAuthContext";
 
 export default function BillSplitGroups() {
   // Group Creation states
@@ -11,6 +12,8 @@ export default function BillSplitGroups() {
 
   // Database keys
   const DB_GROUPS_KEY = "all-groups";
+  //Hooks
+  const { user } = useAuthContext();
 
   const handleAddGroup = async (e) => {
     e.preventDefault();
@@ -45,14 +48,18 @@ export default function BillSplitGroups() {
       {/* Group Creation */}
       <div className="container">
         <div className="left-column">
-          <h2>Create Group</h2>
-          <input
-            type="text"
-            value={groupName}
-            placeholder="Group Name"
-            onChange={(e) => setGroupName(e.target.value)}
-          />
-          <button onClick={handleAddGroup}>Create Group</button>
+          {user && (
+            <>
+              <h2>Create Group</h2>
+              <input
+                type="text"
+                value={groupName}
+                placeholder="Group Name"
+                onChange={(e) => setGroupName(e.target.value)}
+              />
+              <button onClick={handleAddGroup}>Create Group</button>
+            </>
+          )}
           <br />
           <br />
           {/* Created Groups */}
@@ -66,10 +73,7 @@ export default function BillSplitGroups() {
           {/* Active Group Selector*/}
           <div style={{ display: "flex", alignItems: "center" }}>
             <h2>Select Group: </h2>
-            <select
-              value={activeGroup}
-              onChange={(e) => setActiveGroup(e.target.value)}
-            >
+            <select value={activeGroup} onChange={(e) => setActiveGroup(e.target.value)}>
               <option value="">Select</option>
               {groupList.map((group) => (
                 <option key={group.id} value={group.id}>

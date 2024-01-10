@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { database } from "../firebase";
 import { onValue, ref, push } from "firebase/database";
+import { useAuthContext } from "../Hooks/useAuthContext";
 
 export default function BillSplitMembers({ activeGroup }) {
   //Members states
@@ -13,14 +14,14 @@ export default function BillSplitMembers({ activeGroup }) {
   const [expenseName, setExpenseName] = useState("");
   const [inputAmount, setInputAmount] = useState("");
   const [inputPaidBy, setInputPaidBy] = useState("");
-
   const [totalAmountPaid, setTotalAmountPaid] = useState(0);
   const [averageAmountPaid, setAverageAmountPaid] = useState(0);
-
   const [paymentTransactions, setPaymentTransactions] = useState([]);
 
   // Balances state
   const [balances, setBalances] = useState([]);
+  // Hooks
+  const { user } = useAuthContext();
 
   // Database keys
   const DB_GROUPS_KEY = "all-groups";
@@ -206,16 +207,19 @@ export default function BillSplitMembers({ activeGroup }) {
       <div className="container-members">
         <div className="left-column">
           <h2>Members:</h2>
-          <input
-            type="text"
-            value={memberName}
-            placeholder="Enter Member's Name"
-            onChange={(e) => setMemberName(e.target.value)}
-          />
-
-          <button type="button" onClick={(e) => handleAddMember(e, activeGroup)}>
-            Add Member
-          </button>
+          {user && (
+            <>
+              <input
+                type="text"
+                value={memberName}
+                placeholder="Enter Member's Name"
+                onChange={(e) => setMemberName(e.target.value)}
+              />
+              <button type="button" onClick={(e) => handleAddMember(e, activeGroup)}>
+                Add Member
+              </button>
+            </>
+          )}
           {/* Members rendering based on active group */}
           <ul>
             {members.map((member) => (
@@ -224,7 +228,8 @@ export default function BillSplitMembers({ activeGroup }) {
           </ul>
           <br />
           {/* Expense Addition */}
-          {members.length > 0 && activeGroup && (
+
+          {user && members.length > 0 && activeGroup && (
             <form onSubmit={(e) => handleAddExpense(e, activeGroup)}>
               <label>
                 Expenses:
@@ -267,7 +272,7 @@ export default function BillSplitMembers({ activeGroup }) {
 
         <br />
         <div className="right-column">
-          {members.length > 0 && activeGroup && (
+          {user && members.length > 0 && activeGroup && (
             <div>
               <h2>Group's Expenses:</h2>
               <ul>
@@ -291,8 +296,8 @@ export default function BillSplitMembers({ activeGroup }) {
                 {balances.map((balance, index) => (
                   <li key={index}>
                     {balance.balance < 0
-                      ? `${balance.member} should pay $${Math.abs(balance.balance)}`
-                      : `${balance.member} should receive $${Math.abs(balance.balance)}`}
+                      ? `${balance.member} should pay $${Math.abs(balance.balance)}.`
+                      : `${balance.member} should receive $${Math.abs(balance.balance)}.`}
                   </li>
                 ))}
               </ul>
@@ -301,7 +306,7 @@ export default function BillSplitMembers({ activeGroup }) {
               <ul>
                 {paymentTransactions.map((transaction, index) => (
                   <li key={index}>
-                    {transaction.from} should pay {transaction.to} ${transaction.amount}
+                    {transaction.from} should pay {transaction.to} ${transaction.amount}.
                   </li>
                 ))}
               </ul>

@@ -19,7 +19,7 @@ export default function SignUp() {
   };
 
   return (
-    <div>
+    <div className="container-signup">
       <form onSubmit={signUp}>
         <h2>Sign Up</h2>
         <input
@@ -28,19 +28,21 @@ export default function SignUp() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
+        <br />
         <input
           type="password"
           placeholder="Password goes here.."
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
+        <br />
         <input
           type="text"
-          placeholder="Tell me your name.."
+          placeholder="What's your name..?"
           value={displayName}
           onChange={(e) => setDisplayName(e.target.value)}
         />
-
+        <br />
         {!isPending && <button>Sign up</button>}
         {isPending && (
           <button disabled>

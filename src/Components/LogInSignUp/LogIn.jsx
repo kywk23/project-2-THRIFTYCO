@@ -16,33 +16,35 @@ export default function LogIn() {
   };
 
   return (
-    <form onSubmit={logIn}>
-      <h2>Log In</h2>
-      <label>
-        <span>Email:</span>
-        <input
-          type="email"
-          placeholder="Existing email here.."
-          onChange={(e) => setEmail(e.target.value)}
-          value={email}
-        />
-      </label>
-      <label>
-        <span>Password:</span>
-        <input
-          type="password"
-          placeholder="Password ..? "
-          onChange={(e) => setPassword(e.target.value)}
-          value={password}
-        />
-      </label>
-      {!isPending && <button>Log In</button>}
-      {isPending && (
-        <button disabled>
-          <i className="fa fa-spinner fa-spin"></i>Loading...
-        </button>
-      )}
-      {error && <p>{error}</p>}
-    </form>
+    <div className="container-signup">
+      <form onSubmit={logIn}>
+        <h2>Log In</h2>
+        <label>
+          <input
+            type="email"
+            placeholder="Enter email.."
+            onChange={(e) => setEmail(e.target.value)}
+            value={email}
+          />
+        </label>
+        <br />
+        <label>
+          <input
+            type="password"
+            placeholder="Password ..? "
+            onChange={(e) => setPassword(e.target.value)}
+            value={password}
+          />
+        </label>
+        <br />
+        {!isPending && <button>Log In</button>}
+        {isPending && (
+          <button disabled>
+            <i className="fa fa-spinner fa-spin"></i>Loading...
+          </button>
+        )}
+        {error && <p>{error}</p>}
+      </form>
+    </div>
   );
 }
