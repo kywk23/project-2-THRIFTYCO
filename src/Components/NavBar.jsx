@@ -46,7 +46,6 @@ function Navbar() {
                 </li>
               </>
             )}
-
             {user && (
               <>
                 <li style={{ color: "rgb(255, 95, 31)" }}>Hello, {user.displayName} </li>

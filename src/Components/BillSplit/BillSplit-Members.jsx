@@ -52,8 +52,6 @@ export default function BillSplitMembers({ activeGroup }) {
     setExpenses([]);
   }, [activeGroup]);
 
-  // const prevMembersRef = useRef([]);
-
   //useEffect for member and expense addition
   useEffect(() => {
     const memberListRef = ref(database, `${DB_GROUPS_KEY}/${activeGroup}/members`);
@@ -85,8 +83,6 @@ export default function BillSplitMembers({ activeGroup }) {
     });
   }, [activeGroup]);
 
-  //calculate total amount paid, and average of each member
-
   useEffect(() => {
     let totalPaid = 0;
 
@@ -108,7 +104,7 @@ export default function BillSplitMembers({ activeGroup }) {
 
     // Initialize balances
     members.forEach((member) => {
-      balanceMap[member.memberName] = 0; // Start with a balance of zero for each member
+      balanceMap[member.memberName] = 0;
     });
 
     // calculate the actual balance for each member
@@ -174,8 +170,6 @@ export default function BillSplitMembers({ activeGroup }) {
 
         payer.balance -= transferAmount;
         receiver.balance -= transferAmount;
-
-        //loop to ensure payer pays receiver till amount = 0.
       }
     });
     setPaymentTransactions(transactions);

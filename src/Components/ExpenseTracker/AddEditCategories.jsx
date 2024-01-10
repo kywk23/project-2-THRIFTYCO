@@ -2,9 +2,7 @@ import React, { useState } from "react";
 import { database } from "../firebase.jsx";
 import { ref, update, remove } from "firebase/database";
 import "./popup.css";
-import { IconButton } from "@mui/material";
 import ClearRoundedIcon from "@mui/icons-material/ClearRounded";
-import TextField from "@mui/material/TextField";
 
 export default function AddEditCategories({
   showAddCategoryModal,
