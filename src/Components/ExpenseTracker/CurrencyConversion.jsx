@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./popup.css";
+import ClearRoundedIcon from "@mui/icons-material/ClearRounded";
+import TextField from "@mui/material/TextField";
 
 const API_KEY = import.meta.env.VITE_SOME_CURRENCY_API_KEY;
 const API_URL = `https://api.freecurrencyapi.com/v1/latest?apikey=${API_KEY}`;
@@ -103,11 +105,12 @@ export default function CurrencyConversion({
         <div className="overlay">
           <div className="popup">
             <button className="close" onClick={handleCloseCurrencyModal}>
-              Close
+              <ClearRoundedIcon className="BDelete" />
             </button>
-            <h2>Money Currency</h2>
-            <p>Amount to be converted:</p>
+
+            <p className="title">Amount to be converted:</p>
             <input
+              className="amtinput"
               type="number"
               step="0.01"
               min="0.01"
@@ -115,7 +118,7 @@ export default function CurrencyConversion({
               onChange={(e) => handleAmountToBeConverted(e)}
               value={toConvertAmount}
             />
-            <p>From</p>
+            <p className="subtitle">From</p>
             <select
               value={fromCurrency}
               onChange={(e) => setFromCurrency(e.target.value)}
@@ -127,9 +130,10 @@ export default function CurrencyConversion({
                 </option>
               ))}
             </select>
-            <p>To Converted Amount: {convertedAmount}</p>
-            <p>To</p>
+
+            <p className="subtitle">To</p>
             <select
+              className="selection"
               value={toCurrency}
               onChange={(e) => setToCurrency(e.target.value)}
             >
@@ -140,12 +144,18 @@ export default function CurrencyConversion({
                 </option>
               ))}
             </select>
+            <div>
+              <button className="function" onClick={handleCalculate}>
+                Calculate
+              </button>
+            </div>
 
-            <button className="function" onClick={handleCalculate}>
-              Calculate
-            </button>
             <br />
-            <button onClick={handleAddToExpensesForm}>Add to Form</button>
+            <h3>Converted Amount: {convertedAmount}</h3>
+            <br />
+            <div className="addformbtn">
+              <button onClick={handleAddToExpensesForm}>Add to Form</button>
+            </div>
           </div>
         </div>
       )}

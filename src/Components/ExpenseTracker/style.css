@@ -1,0 +1,38 @@
+.selection {
+  width: 200px;
+  font-size: 1em;
+  margin: 10px;
+  border-radius: 8px;
+}
+
+.cat-selection {
+  width: 200px;
+  font-size: 0.7em;
+  margin: 10px;
+  border-radius: 8px;
+}
+
+.container-stats {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 20px 20px 2px 0px;
+}
+
+.container-monthly {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  margin-bottom: 15px;
+}
+
+.container-expenses button,
+div h3 {
+  display: inline-block;
+}
+
+.monthly-button {
+  height: 45px;
+  background-color: rgb(255, 255, 255); /
+}
+

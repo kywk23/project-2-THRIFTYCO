@@ -5,6 +5,7 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
 ChartJS.register(ArcElement, Tooltip, Legend);
 import { filterTransactionsByMonthAndYear } from "./utilities.jsx";
+import ClearRoundedIcon from "@mui/icons-material/ClearRounded";
 
 export default function TransactionStats({
   selectedMonth,
@@ -76,26 +77,28 @@ export default function TransactionStats({
 
         //to change colour during css implementation
         backgroundColor: [
-          "rgba(8, 28, 21, 0.6)",
-          "rgba(45, 106, 79, 0.6)",
-          "rgba(64, 145, 108, 0.6)",
-          "rgba(116, 198, 157, 0.6)",
-          "rgba(183, 228, 199, 0.6)",
-          "rgba(27, 67, 50, 0.6)",
-          "rgba(82, 183, 136, 0.6)",
-          "rgba(149, 213, 178, 0.6)",
-          "rgba(216, 243, 220, 0.6)",
+          "rgba(196, 255, 249, 0.6)",
+          "rgba(156, 234, 239, 0.6)",
+          "rgba(104, 216, 214, 0.6)",
+          "rgba(61, 204, 199, 0.6)",
+          "rgba(7, 190, 184, 0.6)",
+          "rgba(221, 222, 250, 0.6)",
+          "rgba(189, 190, 237, 0.6)",
+          "rgba(152, 153, 214, 0.6)",
+          "rgba(122, 119, 204, 0.6)",
+          "rgba(86, 87, 185, 0.6)",
         ],
         borderColor: [
-          "rgba(8, 28, 21, 0.6)",
-          "rgba(45, 106, 79, 0.6)",
-          "rgba(64, 145, 108, 0.6)",
-          "rgba(116, 198, 157, 0.6)",
-          "rgba(183, 228, 199, 0.6)",
-          "rgba(27, 67, 50, 0.6)",
-          "rgba(82, 183, 136, 0.6)",
-          "rgba(149, 213, 178, 0.6)",
-          "rgba(216, 243, 220, 0.6)",
+          "rgba(196, 255, 249, 0.6)",
+          "rgba(156, 234, 239, 0.6)",
+          "rgba(104, 216, 214, 0.6)",
+          "rgba(61, 204, 199, 0.6)",
+          "rgba(7, 190, 184, 0.6)",
+          "rgba(221, 222, 250, 0.6)",
+          "rgba(189, 190, 237, 0.6)",
+          "rgba(152, 153, 214, 0.6)",
+          "rgba(122, 119, 204, 0.6)",
+          "rgba(86, 87, 185, 0.6)",
         ],
         borderWidth: 1,
       },
@@ -110,9 +113,14 @@ export default function TransactionStats({
         <div className="overlay">
           <div className="popup">
             <button className="close" onClick={handleCloseShowStats}>
-              Close
+              <ClearRoundedIcon className="BDelete" />
             </button>
-            <h2>Transaction Stats</h2>
+            <p className="title">
+              {new Date(selectedYear, selectedMonth).toLocaleString("default", {
+                month: "long",
+              })}{" "}
+              {selectedYear}
+            </p>
             <div className="piechart">
               <Pie data={data} className="piechart" options={options} />
             </div>
