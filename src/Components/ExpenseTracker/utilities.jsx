@@ -3,7 +3,8 @@
 const filterTransactionsByMonthAndYear = (
   data,
   selectedMonth,
-  selectedYear
+  selectedYear,
+  userUUID
 ) => {
   if (!data) return [];
 
@@ -19,7 +20,9 @@ const filterTransactionsByMonthAndYear = (
     const transactionMonth = new Date(transaction.selectedDate).getMonth();
     const transactionYear = new Date(transaction.selectedDate).getFullYear();
     return (
-      selectedMonth === transactionMonth && selectedYear === transactionYear
+      selectedMonth === transactionMonth &&
+      selectedYear === transactionYear &&
+      transaction.userUUID === userUUID
     );
   });
 };

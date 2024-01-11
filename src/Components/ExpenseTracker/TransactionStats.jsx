@@ -7,6 +7,9 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 import { filterTransactionsByMonthAndYear } from "./utilities.jsx";
 import ClearRoundedIcon from "@mui/icons-material/ClearRounded";
 
+//Auth - check user's UID
+import useAuthUID from "../Hooks/useAuthUID";
+
 export default function TransactionStats({
   selectedMonth,
   selectedYear,
@@ -15,6 +18,8 @@ export default function TransactionStats({
 }) {
   const [labels, setLabels] = useState([]);
   const [amountByCategory, setAmountByCategory] = useState({});
+
+  const userUID = useAuthUID();
 
   useEffect(() => {
     if (showStats) {
@@ -28,7 +33,8 @@ export default function TransactionStats({
           const filteredTransactions = filterTransactionsByMonthAndYear(
             data,
             selectedMonth,
-            selectedYear
+            selectedYear,
+            userUID
           );
 
           // Calculate total amount for the categories
@@ -61,7 +67,7 @@ export default function TransactionStats({
         }
       });
     }
-  }, [selectedMonth, selectedYear, showStats]);
+  }, [selectedMonth, selectedYear, showStats, userUID]);
 
   const options = {
     maintainAspectRatio: false,

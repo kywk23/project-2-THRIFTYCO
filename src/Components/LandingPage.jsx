@@ -12,10 +12,10 @@ export default function LandingPage() {
           </div>
         </div>
         <div className="details">
-          <p>
+          <div>
             One stop for your personal and group expenses.
             <p>Split Bills, not Friendship.</p>
-          </p>
+          </div>
         </div>
       </div>
     </div>
