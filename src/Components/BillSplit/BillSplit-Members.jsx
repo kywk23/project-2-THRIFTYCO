@@ -306,6 +306,7 @@ export default function BillSplitMembers({ activeGroup }) {
               </ul>
               <br />
               <br />
+
               <p>Total Expenses of the Group: ${totalAmountPaid.toFixed(2)}</p>
               <br />
               <p>
