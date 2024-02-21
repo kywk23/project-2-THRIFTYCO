@@ -47,46 +47,29 @@ function Navbar() {
                 Home
               </NavLink>
             </li>
-            {user && (
-              <>
-                <li className="active">
-                  <NavLink
-                    to="/expensetracker"
-                    activeclassname="active"
-                    className="nav-link"
-                  >
-                    Expense Tracker
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
-                    to="/splitbill"
-                    activeclassname="active"
-                    className="nav-link"
-                  >
-                    Bill Splitter
-                  </NavLink>
-                </li>
-              </>
-            )}
+
+            <>
+              <li className="active">
+                <NavLink to="/expensetracker" activeclassname="active" className="nav-link">
+                  Expense Tracker
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/splitbill" activeclassname="active" className="nav-link">
+                  Bill Splitter
+                </NavLink>
+              </li>
+            </>
 
             {!user && (
               <>
                 <li>
-                  <NavLink
-                    to="/SignUp"
-                    activeclassname="active"
-                    className="nav-link"
-                  >
+                  <NavLink to="/SignUp" activeclassname="active" className="nav-link">
                     Sign Up
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink
-                    to="/LogIn"
-                    activeclassname="active"
-                    className="nav-link"
-                  >
+                  <NavLink to="/LogIn" activeclassname="active" className="nav-link">
                     Log In
                   </NavLink>
                 </li>
@@ -94,9 +77,7 @@ function Navbar() {
             )}
             {user && (
               <>
-                <li style={{ color: "rgb(255, 95, 31)" }}>
-                  Hello, {user.displayName}{" "}
-                </li>
+                <li style={{ color: "rgb(255, 95, 31)" }}>Hello, {user.displayName} </li>
                 <button
                   style={{ backgroundColor: "white" }}
                   onClick={isLoggedIn ? handleLogout : () => nav("/")} //when user sign out or not previously sign in, goes to home page

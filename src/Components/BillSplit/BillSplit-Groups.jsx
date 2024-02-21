@@ -53,19 +53,18 @@ export default function BillSplitGroups() {
       {/* Group Creation */}
       <div className="container">
         <div className="left-column">
-          {user && (
-            <>
-              <h2>Create Group</h2>
-              <input
-                type="text"
-                style={{ fontSize: "1em" }}
-                value={groupName}
-                placeholder="Group Name"
-                onChange={(e) => setGroupName(e.target.value)}
-              />
-              <button onClick={handleAddGroup}>Create Group</button>
-            </>
-          )}
+          <>
+            <h2>Create Group</h2>
+            <input
+              type="text"
+              style={{ fontSize: "1em" }}
+              value={groupName}
+              placeholder="Group Name"
+              onChange={(e) => setGroupName(e.target.value)}
+            />
+            <button onClick={handleAddGroup}>Create Group</button>
+          </>
+
           <br />
           <br />
           {/* Created Groups */}
@@ -79,10 +78,7 @@ export default function BillSplitGroups() {
           {/* Active Group Selector*/}
           <div style={{ display: "flex", alignItems: "center" }}>
             <h2>Select Group: </h2>
-            <select
-              value={activeGroup}
-              onChange={(e) => setActiveGroup(e.target.value)}
-            >
+            <select value={activeGroup} onChange={(e) => setActiveGroup(e.target.value)}>
               <option value="">Select</option>
               {groupList.map((group) => (
                 <option key={group.id} value={group.id}>
